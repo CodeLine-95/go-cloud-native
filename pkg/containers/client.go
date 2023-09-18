@@ -23,6 +23,11 @@ func (d *Docker) ContainerList() (containerList []types.Container, err error) {
 	}
 
 	ctx := context.Background()
-	containerList, err = cli.ContainerList(ctx, types.ContainerListOptions{})
+
+	containerOptions := types.ContainerListOptions{
+		All: true,
+	}
+
+	containerList, err = cli.ContainerList(ctx, containerOptions)
 	return
 }
