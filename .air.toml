@@ -1,0 +1,51 @@
+# 工作路径
+# 或绝对路径，请注意以下目录必须位于根目录下
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  args_bin = []
+  # 执行的二进制文件
+  bin = "./tmp/main"
+  # shell 命令
+  cmd = "go build -o ./tmp/main ./cmd/main.go"
+  delay = 0
+  exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  exclude_file = []
+  exclude_regex = ["_test.go"]
+  exclude_unchanged = false
+  follow_symlink = false
+  full_bin = ""
+  # 监听目录
+  include_dir = []
+  # 监听文件后缀
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  # 监听文件
+  include_file = []
+  kill_delay = "0s"
+  log = "build-errors.log"
+  poll = false
+  poll_interval = 0
+  rerun = false
+  rerun_delay = 500
+  send_interrupt = false
+  stop_on_error = false
+
+# 自定义每个输出的颜色
+[color]
+  app = ""
+  build = "yellow"
+  main = "magenta"
+  runner = "green"
+  watcher = "cyan"
+
+[log]
+  main_only = false
+  time = true
+
+[misc]
+  clean_on_exit = true
+
+[screen]
+  clear_on_rebuild = false
+  keep_scroll = true

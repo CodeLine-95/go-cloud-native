@@ -1,0 +1,9 @@
+[app]
+    port=":8000"
+    env = "dev"
+    debug = "true"
+
+[log]
+    name = "go-cloud-native"
+    level = "debug"
+    dir = "logs/applogs"
