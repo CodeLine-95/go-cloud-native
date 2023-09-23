@@ -1,7 +1,7 @@
 package xlog
 
 import (
-	logz "github.com/CodeLine-95/go-tools"
+	"github.com/CodeLine-95/go-cloud-native/pkg/logz"
 	"go.uber.org/zap/zapcore"
 	"strings"
 )

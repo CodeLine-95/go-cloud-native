@@ -2,10 +2,10 @@ package xlog
 
 import (
 	"fmt"
+	"github.com/CodeLine-95/go-cloud-native/pkg/logz"
 	"github.com/CodeLine-95/go-cloud-native/pkg/utils/id"
 	"github.com/CodeLine-95/go-cloud-native/pkg/utils/traceId"
 	"github.com/CodeLine-95/go-cloud-native/pkg/xlog"
-	logz "github.com/CodeLine-95/go-tools"
 	"github.com/gin-gonic/gin"
 )
 

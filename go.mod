@@ -3,7 +3,6 @@ module github.com/CodeLine-95/go-cloud-native
 go 1.21.0
 
 require (
-	github.com/CodeLine-95/go-tools v1.0.0
 	github.com/docker/docker v23.0.3+incompatible
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.9.1

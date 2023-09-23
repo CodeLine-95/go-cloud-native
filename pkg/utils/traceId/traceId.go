@@ -1,7 +1,7 @@
 package traceId
 
 import (
-	logz "github.com/CodeLine-95/go-tools"
+	"github.com/CodeLine-95/go-cloud-native/pkg/logz"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap/zapcore"
 	"os"
