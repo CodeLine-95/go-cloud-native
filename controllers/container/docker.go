@@ -2,7 +2,10 @@ package container
 
 import (
 	"github.com/CodeLine-95/go-cloud-native/pkg/containers"
+	"github.com/CodeLine-95/go-cloud-native/services/params"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strings"
 )
 
 // DockerApiInterface docker 容器
@@ -29,6 +32,70 @@ func (d DockerApi) GetContainerList(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"data": containerList,
+	})
+
+	return
+}
+
+func (d DockerApi) ContainerStop(c *gin.Context) {
+	docker := containers.Docker{}
+	var param params.ContainerStop
+	if err := c.ShouldBindJSON(&param); err != nil {
+		panic(err)
+	}
+	var containerID []string
+
+	containerID = strings.Split(param.Ids, ",")
+	code, codeErr := docker.ContainerStop(containerID)
+	if codeErr != nil {
+		panic(codeErr)
+	}
+
+	c.JSON(code, gin.H{})
+
+	return
+}
+
+func (d DockerApi) ContainerLogs(c *gin.Context) {
+	docker := containers.Docker{}
+	var param params.ContainerStop
+	if err := c.ShouldBindJSON(&param); err != nil {
+		panic(err)
+	}
+
+	out := docker.ContainerLogs(param.Ids)
+	c.JSON(http.StatusOK, gin.H{
+		"data": out,
+	})
+
+	return
+}
+
+func (d DockerApi) GetImageList(c *gin.Context) {
+	docker := containers.Docker{}
+
+	imageList, err := docker.ImageList()
+	if err != nil {
+		panic(err)
+	}
+
+	c.JSON(200, gin.H{
+		"data": imageList,
+	})
+
+	return
+}
+
+func (d DockerApi) ImagePull(c *gin.Context) {
+	docker := containers.Docker{}
+	var param params.ImagesPull
+	if err := c.ShouldBindJSON(&param); err != nil {
+		panic(err)
+	}
+
+	out := docker.ImagePull(param.Refstr)
+	c.JSON(http.StatusOK, gin.H{
+		"data": out,
 	})
 
 	return
