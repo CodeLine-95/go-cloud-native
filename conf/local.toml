@@ -1,9 +1,19 @@
 [app]
-    port=":8000"
-    env = "dev"
-    debug = "true"
+    port=":8000"   # 项目启动端口
+    env = "dev"    # 当前环境
+    debug = "true" # 是否开启Debug
 
 [log]
-    name = "go-cloud-native"
-    level = "debug"
-    dir = "logs/applogs"
+    name = "go-cloud-native"  # 日志文件名
+    level = "debug"           # 日志等级
+    dir = "logs/applogs"      # 日志目录
+
+[db]  # 数据库相关配置
+    [db.mysql]    # mysql 组（这里可以扩展其他组）
+        host = "47.88.105.38"  # mysql server 地址
+        port = 13306           # mysql 链接端口
+        user = "cloud_native"  # mysql 登录用户名
+        pass = "GGzHBpwrLiiMZNaY" # mysql 登录密码
+        name = "cloud_native"  # mysql 当前使用库名
+        maxIdleConn = 5        # 最大空闲链接数
+        maxOpenConn = 10       # 最大并发链接数

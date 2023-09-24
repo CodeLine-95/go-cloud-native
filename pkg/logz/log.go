@@ -7,8 +7,6 @@ import (
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-
-	"github.com/CodeLine-95/go-tools/internal"
 )
 
 // defaultLogger 全局默认日志实例
@@ -22,7 +20,7 @@ type (
 		writer        writer
 		level         level
 		fields        []field
-		prefixes      []internal.PrefixFn // 日志记录前统一前缀
+		prefixes      []PrefixFn // 日志记录前统一前缀
 		encoderConfig *encoderConfig
 	}
 
@@ -76,7 +74,7 @@ func New(ops ...Option) *Logger {
 
 	// 直接在stderr write的时候加前缀有较大的性能损耗，因此不采用
 	core := zapcore.NewCore(
-		internal.NewJSONEncoder(internal.EncoderConfig{
+		NewJSONEncoder(EncoderConfig{
 			EncoderConfig: *l.encoderConfig,
 			PrefixFns:     l.prefixes,
 		}),

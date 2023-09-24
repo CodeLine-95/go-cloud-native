@@ -3,9 +3,10 @@ package server
 import (
 	"flag"
 	"fmt"
+	"github.com/CodeLine-95/go-cloud-native/pkg/logz"
 	"github.com/CodeLine-95/go-cloud-native/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/routers"
-	logz "github.com/CodeLine-95/go-tools"
+	"github.com/CodeLine-95/go-cloud-native/store"
 	"github.com/fsnotify/fsnotify"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -31,6 +32,9 @@ func parseConfig() {
 
 	// 初始化日志文件
 	xlog.InitLog(viper.GetString("log.dir"), viper.GetString("log.level"), viper.GetString("log.name"))
+
+	// 初始化数据库
+	store.Init()
 }
 
 func init() {
