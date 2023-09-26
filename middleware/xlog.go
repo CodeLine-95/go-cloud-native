@@ -1,4 +1,4 @@
-package xlog
+package middleware
 
 import (
 	"bytes"

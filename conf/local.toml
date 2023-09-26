@@ -2,6 +2,7 @@
     port=":8000"   # 项目启动端口
     env = "dev"    # 当前环境
     debug = "true" # 是否开启Debug
+    apiVersion = "v1"  # 接口版本
 
 [log]
     name = "go-cloud-native"  # 日志文件名

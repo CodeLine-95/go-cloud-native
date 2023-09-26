@@ -48,7 +48,10 @@ func init() {
 		gin.SetMode(gin.DebugMode)
 	}
 	r := gin.New()
-	r = routers.ApiV1(r)
+
+	// 关闭路由打印
+	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {}
+	routers.InitRouter(r)
 
 	port := viper.GetString("app.port")
 	if port == "" {

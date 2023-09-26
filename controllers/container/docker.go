@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/CodeLine-95/go-cloud-native/pkg/containers"
+	"github.com/CodeLine-95/go-cloud-native/services/containers"
 	"github.com/CodeLine-95/go-cloud-native/services/params"
 	"github.com/gin-gonic/gin"
 	"net/http"

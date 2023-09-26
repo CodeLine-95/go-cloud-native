@@ -24,6 +24,10 @@ func SetTraceId(c *gin.Context, id string) {
 	c.Set(ginContextTraceId, id)
 }
 
+func GetTraceId(c *gin.Context) string {
+	return c.GetString(ginContextTraceId)
+}
+
 func getFields(c *gin.Context, fields []zapcore.Field) []zapcore.Field {
 	logId := c.GetString(ginContextTraceId)
 	var method, path, raw, ip string
