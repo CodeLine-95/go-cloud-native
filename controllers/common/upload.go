@@ -23,7 +23,7 @@ func Upload(c *gin.Context) {
 	fileExt := path.Ext(file.Filename)
 
 	// 新文件名
-	fileName := utils.MD5(strconv.FormatInt(time.Now().Unix(), 10)) + fileExt
+	fileName := utils.MD5(file.Filename+strconv.FormatInt(time.Now().Unix(), 10)) + fileExt
 
 	// 目录转换
 	filePath := filepath.Join(utils.NewMkdir("uploads"), "/", fileName)
