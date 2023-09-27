@@ -44,13 +44,17 @@ func init() {
 			panic(err)
 		}
 	}()
+
+	gin.DisableConsoleColor()
+
 	if viper.GetString("app.env") == "test" {
 		gin.SetMode(gin.DebugMode)
 	}
+
 	r := gin.New()
 
 	// 关闭路由打印
-	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {}
+	//gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {}
 	routers.InitRouter(r)
 
 	port := viper.GetString("app.port")

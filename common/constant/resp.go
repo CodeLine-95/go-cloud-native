@@ -10,7 +10,7 @@ type Response struct {
 	// log id
 	TraceID string `json:"trace_id" example:"0"`
 	// 返回信息
-	Data interface{} `json:"data"`
+	Data any `json:"data"`
 }
 
 type RespPage struct {

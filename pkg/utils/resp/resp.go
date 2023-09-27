@@ -9,6 +9,9 @@ import (
 	"net/http"
 )
 
+type ResponseHandler struct {
+}
+
 func Response(c *gin.Context, codeErr *constant.Error, data any) {
 	traceID := traceId.GetTraceId(c)
 	err := constant.ErrorSuccess
@@ -16,11 +19,20 @@ func Response(c *gin.Context, codeErr *constant.Error, data any) {
 		err = codeErr
 	}
 	msg := err.ErrMsg
-	xlog.Error(traceId.GetLogContext(
-		c,
-		msg,
-		logz.F("err", err),
-	))
+	if err.ErrCode == 0 {
+		xlog.Info(traceId.GetLogContext(
+			c,
+			msg,
+			logz.F("response", err),
+		))
+	} else {
+		xlog.Error(traceId.GetLogContext(
+			c,
+			msg,
+			logz.F("response", err),
+		))
+	}
+
 	c.JSON(http.StatusOK, constant.Response{
 		ErrNo:   err.ErrCode,
 		Msg:     msg,
@@ -28,4 +40,5 @@ func Response(c *gin.Context, codeErr *constant.Error, data any) {
 		TraceID: traceID,
 		Data:    data,
 	})
+	return
 }

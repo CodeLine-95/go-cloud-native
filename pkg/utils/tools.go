@@ -4,8 +4,11 @@ import (
 	"crypto/md5"
 	"fmt"
 	"math"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // MD5 generate md5 by string
@@ -58,4 +61,14 @@ func SubStr(s string, l int) string {
 func Round(val float64, precision int) float64 {
 	p := math.Pow10(precision)
 	return math.Floor(val*p+0.5) / p
+}
+
+func NewMkdir(path string) string {
+	floderName := time.Now().Format(time.DateOnly)
+	floderPath := filepath.Join(path, floderName)
+	err := os.MkdirAll(floderPath, os.ModePerm)
+	if err != nil {
+		return ""
+	}
+	return floderPath
 }
