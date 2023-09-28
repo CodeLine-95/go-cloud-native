@@ -11,6 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
+	"path/filepath"
 )
 
 var RootCmd = &cobra.Command{
@@ -19,7 +21,8 @@ var RootCmd = &cobra.Command{
 }
 
 func parseConfig() {
-	config := flag.String("c", "conf/local.toml", "conf")
+	getwd, _ := os.Getwd()
+	config := flag.String("c", filepath.Join(getwd, "/", "conf/local.toml"), "conf")
 	flag.Parse()
 	viper.SetConfigFile(*config)
 	if err := viper.ReadInConfig(); err != nil {
