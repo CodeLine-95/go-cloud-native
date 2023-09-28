@@ -10,6 +10,7 @@ const (
 	ErrorNotLogin      = 6
 	ErrorNetRequest    = 7
 	ErrorIO            = 8
+	ErrorJWT           = 9
 
 	// ErrorParams 参数错误
 	ErrorParams = 400
@@ -44,6 +45,7 @@ var ErrorMsg = map[int]string{
 	ErrorDB:            "db failed",
 	ErrorNotLogin:      "need login",
 	ErrorUploadImage:   "upload image failed",
+	ErrorJWT:           "generate token failed",
 }
 
 type Error struct {

@@ -9,6 +9,10 @@ const (
 	UserName = "user"
 )
 
+const (
+	CloudNative = "cloudNative"
+)
+
 // UploadFileMaxSize 上传文件的最大限制
 const (
 	UploadFileMaxSize int64 = 20 << 20

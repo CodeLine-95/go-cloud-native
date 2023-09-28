@@ -47,7 +47,7 @@ func Init() {
 				instanceCfg.Port,
 				instanceCfg.Name,
 				"utf8mb4")
-			engine, err := xorm.NewEngine(instanceRwType, dsn)
+			engine, err := xorm.NewEngine("mysql", dsn)
 			if err != nil {
 				panic(err)
 			}
@@ -81,7 +81,7 @@ func Grp(name string) *xorm.Engine {
 
 // GetTableName 返回指定的表名
 func GetTableName(name string) string {
-	r := groups["mysql"]
+	r := groups["cloudNative"]
 	tableList, err := r.DBMetas()
 	if err != nil {
 		return ""
