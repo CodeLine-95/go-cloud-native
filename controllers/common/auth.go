@@ -26,14 +26,15 @@ func Login(c *gin.Context) {
 	}
 
 	engine := db.Grp(constant.CloudNative)
-	user := models.CloudUser{}
-	err = engine.Where("user_name = ?", params.UserName).Find(&user)
+	var user models.CloudUser
+	_, err = engine.Where("user_name = ?", params.UserName).Get(&user)
 	if err != nil {
 		xlog.Info(traceId.GetLogContext(c, constant.ErrorMsg[constant.ErrorDB], logz.F("err", err)))
 		resp.Response(c, &constant.Error{
 			ErrCode: constant.ErrorDB,
 			ErrMsg:  constant.ErrorMsg[constant.ErrorDB],
 		}, nil)
+		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(params.PassWord))
@@ -43,11 +44,12 @@ func Login(c *gin.Context) {
 			ErrCode: constant.ErrorParams,
 			ErrMsg:  constant.ErrorMsg[constant.ErrorParams],
 		}, nil)
+		return
 	}
 
 	auth := jwt.Auth{
 		Type:     jwt.TypeJWT,
-		UID:      int64(user.ID),
+		UID:      int64(user.Id),
 		UserName: user.UserName,
 		Exp:      0,
 	}
@@ -59,7 +61,10 @@ func Login(c *gin.Context) {
 			ErrCode: constant.ErrorJWT,
 			ErrMsg:  constant.ErrorMsg[constant.ErrorJWT],
 		}, nil)
+		return
 	}
+
+	token.SetHeader(c.Writer)
 
 	xlog.Info(traceId.GetLogContext(c, "generate token", logz.F("token", token)))
 	resp.Response(c, &constant.Error{

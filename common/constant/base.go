@@ -10,7 +10,7 @@ const (
 )
 
 const (
-	CloudNative = "cloudNative"
+	CloudNative = "cloud_native"
 )
 
 // UploadFileMaxSize 上传文件的最大限制

@@ -62,13 +62,6 @@ func Init() {
 			engine.ShowSQL(viper.GetBool("app.debug"))
 			engine.SetMapper(names.GonicMapper{})
 
-			//if ok, _ := engine.IsTableExist(new(models.CloudUser)); !ok {
-			//	err := engine.CreateTables(new(models.CloudUser))
-			//	if err != nil {
-			//		panic(err)
-			//	}
-			//}
-
 			groups[instanceRwType] = engine
 		}
 	})
@@ -77,21 +70,4 @@ func Init() {
 // Grp 返回指定实例组实例
 func Grp(name string) *xorm.Engine {
 	return groups[name]
-}
-
-// GetTableName 返回指定的表名
-func GetTableName(name string) string {
-	r := groups["cloudNative"]
-	tableList, err := r.DBMetas()
-	if err != nil {
-		return ""
-	}
-
-	for _, table := range tableList {
-		if name == table.Name {
-			return table.Name
-		}
-	}
-
-	return ""
 }

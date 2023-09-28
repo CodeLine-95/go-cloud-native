@@ -1,8 +1,8 @@
 package container
 
 import (
+	"github.com/CodeLine-95/go-cloud-native/services"
 	"github.com/CodeLine-95/go-cloud-native/services/containers"
-	"github.com/CodeLine-95/go-cloud-native/services/params"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -39,7 +39,7 @@ func (d DockerApi) GetContainerList(c *gin.Context) {
 
 func (d DockerApi) ContainerStop(c *gin.Context) {
 	docker := containers.Docker{}
-	var param params.ContainerStop
+	var param services.ContainerStop
 	if err := c.ShouldBindJSON(&param); err != nil {
 		panic(err)
 	}
@@ -58,7 +58,7 @@ func (d DockerApi) ContainerStop(c *gin.Context) {
 
 func (d DockerApi) ContainerLogs(c *gin.Context) {
 	docker := containers.Docker{}
-	var param params.ContainerStop
+	var param services.ContainerStop
 	if err := c.ShouldBindJSON(&param); err != nil {
 		panic(err)
 	}
@@ -88,7 +88,7 @@ func (d DockerApi) GetImageList(c *gin.Context) {
 
 func (d DockerApi) ImagePull(c *gin.Context) {
 	docker := containers.Docker{}
-	var param params.ImagesPull
+	var param services.ImagesPull
 	if err := c.ShouldBindJSON(&param); err != nil {
 		panic(err)
 	}

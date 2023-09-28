@@ -3,16 +3,19 @@ package test
 import (
 	"flag"
 	"fmt"
+	"github.com/CodeLine-95/go-cloud-native/common/constant"
 	"github.com/CodeLine-95/go-cloud-native/pkg/logz"
-	"github.com/CodeLine-95/go-cloud-native/pkg/utils/ip"
 	"github.com/CodeLine-95/go-cloud-native/pkg/xlog"
+	"github.com/CodeLine-95/go-cloud-native/services/models"
 	"github.com/CodeLine-95/go-cloud-native/store"
+	"github.com/CodeLine-95/go-cloud-native/store/db"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func parseConfig() {
@@ -36,7 +39,7 @@ func parseConfig() {
 }
 
 func TestBcrypt(t *testing.T) {
-	//parseConfig()
+	parseConfig()
 	password := "123456"
 	fromPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -44,22 +47,21 @@ func TestBcrypt(t *testing.T) {
 	}
 	fmt.Println(string(fromPassword))
 
-	fmt.Println(ip.ClientIP())
+	//fmt.Println(ip.ClientIP())
 
-	//engine := db.Grp("mysql")
-	//
-	//user := models.CloudUser{
-	//	UserName:   "admin",
-	//	PassWord:   string(fromPassword),
-	//	UserEmail:  "admin@email.com",
-	//	LoginIp:    ip.ClientIP(),
-	//	CreateTime: int(time.Now().Unix()),
-	//	Status:     1,
-	//}
-	//
-	//cnt, err := engine.Insert(user)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//fmt.Println(cnt)
+	engine := db.Grp(constant.CloudNative)
+
+	user := models.CloudUser{
+		UserName:   "admin",
+		PassWord:   string(fromPassword),
+		UserEmail:  "admin@email.com",
+		CreateTime: int(time.Now().Unix()),
+		Status:     1,
+	}
+
+	cnt, err := engine.Insert(user)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(cnt)
 }
