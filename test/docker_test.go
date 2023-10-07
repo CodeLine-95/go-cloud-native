@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/CodeLine-95/go-cloud-native/services/containers"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/service/containers"
 	"testing"
 )
 

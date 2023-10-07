@@ -3,12 +3,11 @@ package test
 import (
 	"flag"
 	"fmt"
-	"github.com/CodeLine-95/go-cloud-native/common/constant"
-	"github.com/CodeLine-95/go-cloud-native/pkg/logz"
-	"github.com/CodeLine-95/go-cloud-native/pkg/xlog"
-	"github.com/CodeLine-95/go-cloud-native/services/models"
-	"github.com/CodeLine-95/go-cloud-native/store"
-	"github.com/CodeLine-95/go-cloud-native/store/db"
+	"github.com/CodeLine-95/go-cloud-native/initial"
+	"github.com/CodeLine-95/go-cloud-native/initial/store/db"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
+	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
@@ -30,12 +29,8 @@ func parseConfig() {
 	viper.OnConfigChange(func(in fsnotify.Event) {
 		logz.Info("Config: conf/local.toml Changed...")
 	})
-
-	// 初始化日志文件
-	xlog.InitLog(viper.GetString("log.dir"), viper.GetString("log.level"), viper.GetString("log.name"))
-
 	// 初始化数据库
-	store.Init()
+	initial.Init()
 }
 
 func TestBcrypt(t *testing.T) {
@@ -55,7 +50,7 @@ func TestBcrypt(t *testing.T) {
 		UserName:   "admin",
 		PassWord:   string(fromPassword),
 		UserEmail:  "admin@email.com",
-		CreateTime: int(time.Now().Unix()),
+		CreateTime: time.Now().Unix(),
 		Status:     1,
 	}
 
