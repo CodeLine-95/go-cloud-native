@@ -2,5 +2,5 @@ package constant
 
 const (
 	JwtCookieName = "__go-cloud-native__"
-	JwtSignKey    = "JWTSIGN"
+	JwtSignKey    = "__jwt-token-sign__"
 )

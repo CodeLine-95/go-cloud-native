@@ -9,7 +9,11 @@ import (
 
 func Init() {
 	// 初始化日志文件
-	xlog.InitLog(viper.GetString("log.dir"), viper.GetString("log.level"), viper.GetString("log.name"))
+	xlog.InitLog(
+		viper.GetString("log.dir"),
+		viper.GetString("log.level"),
+		viper.GetString("log.name"),
+	)
 
 	// 初始化DB
 	db.Init()

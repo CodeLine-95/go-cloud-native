@@ -9,7 +9,6 @@ import (
 
 const (
 	TypeJWT = "jwt"
-	JWTSIGN = "__jwt-token-sign__"
 )
 
 type ValidFunc func(c *Auth) error

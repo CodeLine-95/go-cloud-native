@@ -54,7 +54,7 @@ func Login(c *gin.Context) {
 		Exp:      0,
 	}
 
-	token, err := auth.Encode(jwt.JWTSIGN)
+	token, err := auth.Encode(constant.JwtSignKey)
 	if err != nil {
 		xlog.Info(traceId.GetLogContext(c, constant.ErrorMsg[constant.ErrorJWT], logz.F("err", err)))
 		resp.Response(c, &constant.Error{
