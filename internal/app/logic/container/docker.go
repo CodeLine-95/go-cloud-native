@@ -30,7 +30,7 @@ func (d DockerApi) GetContainerList(c *gin.Context) {
 // ContainerStop 停止运行中的容器 / 停止所有运行中的容器
 func (d DockerApi) ContainerStop(c *gin.Context) {
 	docker := containers.Docker{}
-	var param models.ContainerStop
+	var param models.ContainerStopRequest
 	if err := c.ShouldBindJSON(&param); err != nil {
 		panic(err)
 	}
@@ -50,7 +50,7 @@ func (d DockerApi) ContainerStop(c *gin.Context) {
 // ContainerLogs 获取指定容器的日志
 func (d DockerApi) ContainerLogs(c *gin.Context) {
 	docker := containers.Docker{}
-	var param models.ContainerStop
+	var param models.ContainerStopRequest
 	if err := c.ShouldBindJSON(&param); err != nil {
 		panic(err)
 	}
@@ -82,7 +82,7 @@ func (d DockerApi) GetImageList(c *gin.Context) {
 // ImagePull 拉取镜像
 func (d DockerApi) ImagePull(c *gin.Context) {
 	docker := containers.Docker{}
-	var param models.ImagesPull
+	var param models.ImagesPullRequest
 	if err := c.ShouldBindJSON(&param); err != nil {
 		panic(err)
 	}

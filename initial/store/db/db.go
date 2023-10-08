@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
@@ -27,6 +28,7 @@ type (
 		Name        string
 		MaxIdleConn int
 		MaxOpenConn int
+		AutoLoad    bool
 	}
 )
 
@@ -63,6 +65,25 @@ func Init() {
 			engine.SetMaxOpenConns(instanceCfg.MaxOpenConn)
 			engine.ShowSQL(viper.GetBool("app.debug"))
 			engine.SetMapper(names.GonicMapper{})
+
+			// 是否自动同步数据库表结构
+			if instanceCfg.AutoLoad {
+				syncMap := make([]interface{}, 0)
+				syncMap = append(
+					syncMap,
+					new(models.CloudUser),
+					new(models.CloudRole),
+				)
+				err := engine.Sync(syncMap)
+				if err != nil {
+					logz.Error("engine sync fail",
+						logz.F("table", []string{
+							new(models.CloudUser).TableName(),
+							new(models.CloudRole).TableName(),
+						}), logz.F("err", err),
+					)
+				}
+			}
 
 			groups[instanceRwType] = engine
 		}

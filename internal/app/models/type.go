@@ -5,10 +5,16 @@ type LoginRequest struct {
 	PassWord string `json:"pass_word"`
 }
 
-type ContainerStop struct {
+type RoleListRequest struct {
+	SearchKey string `json:"search_key"`
+	Page      int64  `json:"page"`
+	PageSize  int64  `json:"page_size"`
+}
+
+type ContainerStopRequest struct {
 	Ids string `json:"ids"`
 }
 
-type ImagesPull struct {
+type ImagesPullRequest struct {
 	Refstr string `json:"refstr"`
 }

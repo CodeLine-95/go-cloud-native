@@ -9,6 +9,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
+	"github.com/CodeLine-95/go-cloud-native/tools/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -48,10 +49,9 @@ func Login(c *gin.Context) {
 	}
 
 	auth := jwt.Auth{
-		Type:     jwt.TypeJWT,
-		UID:      user.Id,
-		UserName: user.UserName,
-		Exp:      0,
+		Type: jwt.TypeJWT,
+		UID:  user.Id,
+		Foo:  utils.RandStringRunes(10),
 	}
 
 	token, err := auth.Encode(constant.JwtSignKey)

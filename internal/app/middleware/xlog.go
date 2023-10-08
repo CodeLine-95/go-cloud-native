@@ -42,6 +42,14 @@ func Logger() gin.HandlerFunc {
 					jsonByte, _ := json.Marshal(values)
 					params = string(jsonByte)
 				}
+			case "application/json":
+				if requestBody, err := io.ReadAll(c.Request.Body); err == nil {
+					c.Request.Body = io.NopCloser(bytes.NewBuffer(requestBody))
+					jsonStruct := make(map[string]string, 0)
+					_ = json.Unmarshal(requestBody, &jsonStruct)
+					jsonByte, _ := json.Marshal(jsonStruct)
+					params = string(jsonByte)
+				}
 			default:
 				if requestBody, err := io.ReadAll(c.Request.Body); err == nil {
 					c.Request.Body = io.NopCloser(bytes.NewBuffer(requestBody))

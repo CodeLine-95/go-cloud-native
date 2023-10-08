@@ -4,6 +4,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/initial/router"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"log"
 )
 
 func Init() {
@@ -11,15 +12,17 @@ func Init() {
 	gin.DisableConsoleColor()
 
 	// 测试环境打开 debug
-	if viper.GetString("app.env") == "test" {
+	if viper.GetString("app.env") == "test" || viper.GetString("app.env") == "dev" {
 		gin.SetMode(gin.DebugMode)
 	}
 
 	//初始化 gin
 	r := gin.New()
 
-	// 关闭路由打印
-	//gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {}
+	// Debug 日志输出格式
+	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
+		log.Printf("[cloud-native] %v %v %v \n", httpMethod, absolutePath, handlerName)
+	}
 
 	// 加载路由配置
 	router.InitRouter(r)

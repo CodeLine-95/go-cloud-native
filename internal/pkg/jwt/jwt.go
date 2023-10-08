@@ -3,7 +3,7 @@ package jwt
 import (
 	"fmt"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 )
 
@@ -28,8 +28,9 @@ func GetToken(r *http.Request, cookieName string) Token {
 // Decode 将Token解码成Auth结构体， verify为true表示进行，校验失败则返回nil
 func (t Token) Decode(sign string, verify bool) *Auth {
 	claims := &Auth{}
-	parser := &jwt.Parser{
-		SkipClaimsValidation: !verify,
+	parser := &jwt.Parser{}
+	if verify {
+		parser = jwt.NewParser(jwt.WithoutClaimsValidation())
 	}
 	token, err := parser.ParseWithClaims(string(t), claims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

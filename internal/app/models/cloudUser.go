@@ -7,7 +7,7 @@ type CloudUser struct {
 	UserEmail  string `json:"user_email" xorm:"varchar(200) notnull comment('邮箱')"`
 	LoginIp    string `json:"login_ip" xorm:"varchar(200) notnull comment('登录IP')"`
 	LastTime   int64  `json:"last_time" xorm:"int(11) notnull comment('最后登录时间')"`
-	CreateTime int64  `json:"create_time"`
+	CreateTime int64  `json:"create_time" xorm:"int(11) comment('创建时间')"`
 	Status     int64  `json:"status" xorm:"int(10) notnull index default(0) comment('用户状态: 0正常、1禁用')"`
 }
 
