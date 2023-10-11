@@ -11,6 +11,19 @@ type RoleListRequest struct {
 	PageSize  int64  `json:"page_size"`
 }
 
+type RoleAddRequest struct {
+	Name     string `json:"name"`
+	Remark   string `json:"remark"`
+	RulesIds string `json:"rules_ids"`
+}
+type RoleEditRequest struct {
+	Id       int64  `json:"id"`
+	Name     string `json:"name"`
+	Remark   string `json:"remark"`
+	RulesIds string `json:"rules_ids"`
+	Status   int64  `json:"status"`
+}
+
 type ContainerStopRequest struct {
 	Ids string `json:"ids"`
 }

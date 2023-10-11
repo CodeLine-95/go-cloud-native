@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	_ "github.com/go-sql-driver/mysql"
@@ -93,4 +94,9 @@ func Init() {
 // Grp 返回指定实例组实例
 func Grp(name string) *xorm.Engine {
 	return groups[name]
+}
+
+// D 返回指定实例组实例
+func D() *xorm.Engine {
+	return groups[constant.CloudNative]
 }

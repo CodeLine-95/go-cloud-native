@@ -4,14 +4,14 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/initial/store/db"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/common"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/utils/resp"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
 	"github.com/CodeLine-95/go-cloud-native/tools/utils"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -19,32 +19,20 @@ func Login(c *gin.Context) {
 	params := models.LoginRequest{}
 	var err error
 	if err = c.ShouldBindJSON(&params); err != nil {
-		xlog.Info(traceId.GetLogContext(c, constant.ErrorMsg[constant.ErrorParams], logz.F("err", err)))
-		resp.Response(c, &constant.Error{
-			ErrCode: constant.ErrorParams,
-			ErrMsg:  constant.ErrorMsg[constant.ErrorParams],
-		}, nil)
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 	}
 
-	engine := db.Grp(constant.CloudNative)
+	engine := db.D()
 	var user models.CloudUser
 	has, err := engine.Where("user_name = ?", params.UserName).Get(&user)
 	if !has || err != nil {
-		xlog.Info(traceId.GetLogContext(c, constant.ErrorMsg[constant.ErrorDB], logz.F("err", err)))
-		resp.Response(c, &constant.Error{
-			ErrCode: constant.ErrorDB,
-			ErrMsg:  constant.ErrorMsg[constant.ErrorDB],
-		}, nil)
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(params.PassWord))
-	if err != nil {
-		xlog.Info(traceId.GetLogContext(c, constant.ErrorMsg[constant.ErrorParams], logz.F("err", err)))
-		resp.Response(c, &constant.Error{
-			ErrCode: constant.ErrorParams,
-			ErrMsg:  constant.ErrorMsg[constant.ErrorParams],
-		}, nil)
+	ok, err := common.CompareHashAndPassword(user.PassWord, params.PassWord)
+	if !ok || err != nil {
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
 	}
 
@@ -56,11 +44,7 @@ func Login(c *gin.Context) {
 
 	token, err := auth.Encode(constant.JwtSignKey)
 	if err != nil {
-		xlog.Info(traceId.GetLogContext(c, constant.ErrorMsg[constant.ErrorJWT], logz.F("err", err)))
-		resp.Response(c, &constant.Error{
-			ErrCode: constant.ErrorJWT,
-			ErrMsg:  constant.ErrorMsg[constant.ErrorJWT],
-		}, nil)
+		response.Error(c, constant.ErrorJWT, err, constant.ErrorMsg[constant.ErrorJWT])
 		return
 	}
 
@@ -73,8 +57,5 @@ func Login(c *gin.Context) {
 	token.SetHeader(c.Writer)
 
 	xlog.Info(traceId.GetLogContext(c, "generate token", logz.F("token", token)))
-	resp.Response(c, &constant.Error{
-		ErrCode: constant.Success,
-		ErrMsg:  constant.ErrorMsg[constant.Success],
-	}, nil)
+	response.OK(c, nil, constant.ErrorMsg[constant.Success])
 }
