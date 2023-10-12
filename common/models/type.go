@@ -12,16 +12,17 @@ type RoleListRequest struct {
 }
 
 type RoleAddRequest struct {
-	Name     string `json:"name"`
-	Remark   string `json:"remark"`
-	RulesIds string `json:"rules_ids"`
+	Name   string `json:"name"`
+	Remark string `json:"remark"`
+	Key    string `json:"key"`
 }
 type RoleEditRequest struct {
-	Id       int64  `json:"id"`
-	Name     string `json:"name"`
-	Remark   string `json:"remark"`
-	RulesIds string `json:"rules_ids"`
-	Status   int64  `json:"status"`
+	Id     int64  `json:"id"`
+	Name   string `json:"name"`
+	Remark string `json:"remark"`
+	Key    string `json:"key"`
+	Sort   int64  `json:"sort"`
+	Status int64  `json:"status"`
 }
 
 type ContainerStopRequest struct {

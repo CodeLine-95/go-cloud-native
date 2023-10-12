@@ -1,10 +1,11 @@
 package common
 
 import (
+	common "github.com/CodeLine-95/go-cloud-native/common/models"
 	"github.com/CodeLine-95/go-cloud-native/initial/store/db"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/common"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
@@ -16,10 +17,11 @@ import (
 )
 
 func Login(c *gin.Context) {
-	params := models.LoginRequest{}
+	params := common.LoginRequest{}
 	var err error
 	if err = c.ShouldBindJSON(&params); err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
 	}
 
 	engine := db.D()
@@ -30,7 +32,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	ok, err := common.CompareHashAndPassword(user.PassWord, params.PassWord)
+	ok, err := base.CompareHashAndPassword(user.PassWord, params.PassWord)
 	if !ok || err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return

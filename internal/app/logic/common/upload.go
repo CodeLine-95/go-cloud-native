@@ -2,7 +2,7 @@ package common
 
 import (
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/utils/resp"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/tools/utils"
 	"github.com/gin-gonic/gin"
 	"path"
@@ -14,10 +14,8 @@ import (
 func Upload(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
-		resp.Response(c, &constant.Error{
-			ErrCode: constant.ErrorParams,
-			ErrMsg:  constant.ErrorMsg[constant.ErrorParams],
-		}, nil)
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
 	}
 	// 获取文件后缀名
 	fileExt := path.Ext(file.Filename)
@@ -30,16 +28,11 @@ func Upload(c *gin.Context) {
 
 	// 保存文件
 	if saveErr := c.SaveUploadedFile(file, filePath); saveErr != nil {
-		resp.Response(c, &constant.Error{
-			ErrCode: constant.ErrorUploadImage,
-			ErrMsg:  "文件上传失败",
-		}, nil)
+		response.Error(c, constant.ErrorUploadImage, saveErr, "文件上传失败")
+		return
 	}
 
-	resp.Response(c, &constant.Error{
-		ErrCode: constant.Success,
-		ErrMsg:  constant.ErrorMsg[constant.Success],
-	}, gin.H{
+	response.OK(c, gin.H{
 		"fileUrl": filePath,
-	})
+	}, constant.ErrorMsg[constant.Success])
 }

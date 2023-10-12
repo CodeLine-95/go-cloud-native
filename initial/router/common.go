@@ -6,7 +6,7 @@ import (
 )
 
 func Common(r *gin.RouterGroup) {
-	c := r.Group("/common")
+	c := r.Group("/base")
 	c.POST("/upload", common.Upload)
 
 	a := r.Group("/auth")
