@@ -2,7 +2,6 @@ package router
 
 import (
 	"fmt"
-	routers "github.com/CodeLine-95/go-cloud-native/initial/router/docker"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -21,6 +20,6 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 
 	// 批量设置中间件:  jwt登录验证
 	versionRouter.Use(handlersFuncMap...)
-	routers.DockerRouter(versionRouter)
+	Validate(versionRouter)
 	return r
 }

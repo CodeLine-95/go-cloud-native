@@ -1,14 +1,14 @@
 package router
 
 import (
-	"github.com/CodeLine-95/go-cloud-native/internal/app/logic/common"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/logic"
 	"github.com/gin-gonic/gin"
 )
 
 func Common(r *gin.RouterGroup) {
 	c := r.Group("/base")
-	c.POST("/upload", common.Upload)
+	c.POST("/upload", logic.Upload)
 
 	a := r.Group("/auth")
-	a.POST("/login", common.Login)
+	a.POST("/login", logic.Login)
 }

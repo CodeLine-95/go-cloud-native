@@ -15,15 +15,15 @@ type RoleAddRequest struct {
 	Name   string `json:"name"`
 	Remark string `json:"remark"`
 	Key    string `json:"key"`
-	Sort   int64  `json:"sort"`
+	Sort   uint8  `json:"sort"`
 }
 type RoleEditRequest struct {
 	Id     int64  `json:"id"`
 	Name   string `json:"name"`
 	Remark string `json:"remark"`
 	Key    string `json:"key"`
-	Sort   int64  `json:"sort"`
-	Status int64  `json:"status"`
+	Sort   uint8  `json:"sort"`
+	Status uint8  `json:"status"`
 }
 
 type ContainerStopRequest struct {

@@ -1,4 +1,4 @@
-package common
+package logic
 
 import (
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"

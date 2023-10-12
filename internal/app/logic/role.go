@@ -1,4 +1,4 @@
-package role
+package logic
 
 import (
 	common "github.com/CodeLine-95/go-cloud-native/common/models"
@@ -39,15 +39,14 @@ func Add(c *gin.Context) {
 		RoleKey:    params.Key,
 		RoleSort:   params.Sort,
 		ControlBy: common.ControlBy{
-			CreateBy: auth.UID,
+			CreateBy: uint32(auth.UID),
 		},
 		ModelTime: common.ModelTime{
-			CreatTime: time.Now().Unix(),
+			CreateTime: uint32(time.Now().Unix()),
 		},
 	}
-	engine := db.D()
-	cnt, err := engine.Insert(cloudRole)
-	if cnt == 0 || err != nil {
+	res := db.D().Create(cloudRole)
+	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
@@ -70,22 +69,21 @@ func Edit(c *gin.Context) {
 	}
 
 	cloudRole := &models.CloudRole{
-		RoleId:     params.Id,
+		RoleId:     uint32(params.Id),
 		RoleName:   params.Name,
 		RoleRemark: params.Remark,
 		RoleKey:    params.Key,
 		RoleSort:   params.Sort,
 		Status:     params.Status,
 		ControlBy: common.ControlBy{
-			UpdateBy: auth.UID,
+			UpdateBy: uint32(auth.UID),
 		},
 		ModelTime: common.ModelTime{
-			UpdateTime: time.Now().Unix(),
+			UpdateTime: uint32(time.Now().Unix()),
 		},
 	}
-	engine := db.D()
-	cnt, err := engine.Update(cloudRole)
-	if cnt == 0 || err != nil {
+	res := db.D().Updates(cloudRole)
+	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
@@ -101,9 +99,8 @@ func Del(c *gin.Context) {
 		return
 	}
 
-	engine := db.D()
-	cnt, err := engine.Delete(params)
-	if cnt == 0 || err != nil {
+	err := db.D().Delete(params).Error
+	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}

@@ -1,4 +1,4 @@
-package common
+package logic
 
 import (
 	common "github.com/CodeLine-95/go-cloud-native/common/models"
@@ -26,8 +26,8 @@ func Login(c *gin.Context) {
 
 	engine := db.D()
 	var user models.CloudUser
-	has, err := engine.Where("user_name = ?", params.UserName).Get(&user)
-	if !has || err != nil {
+	err = engine.Where("user_name = ?", params.UserName).Find(&user).Error
+	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 
 	auth := jwt.Auth{
 		Type: jwt.TypeJWT,
-		UID:  user.Id,
+		UID:  int64(user.Id),
 		Foo:  utils.RandStringRunes(10),
 	}
 
@@ -52,8 +52,12 @@ func Login(c *gin.Context) {
 
 	// 更新用户登录信息
 	user.LoginIp = c.ClientIP()
-	user.LastTime = time.Now().Unix()
-	_, _ = engine.Update(user)
+	user.LastTime = uint32(time.Now().Unix())
+	err = engine.Save(user).Error
+	if err != nil {
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
 
 	// 写入 Header
 	token.SetHeader(c.Writer)

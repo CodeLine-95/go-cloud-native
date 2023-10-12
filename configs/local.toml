@@ -14,7 +14,7 @@
         host = "127.0.0.1"     # mysql server 地址
         port = 13306           # mysql 链接端口
         user = "cloud_native"  # mysql 登录用户名
-        pass = "ZOYk&#195t9OWZo~5+ " # mysql 登录密码
+        pass = "ZOYk&#195t9OWZo~5+" # mysql 登录密码
         name = "cloud_native"  # mysql 当前使用库名
         maxIdleConn = 5        # 最大空闲链接数
         maxOpenConn = 10       # 最大并发链接数
