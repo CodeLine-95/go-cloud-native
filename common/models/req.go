@@ -15,6 +15,7 @@ type RoleAddRequest struct {
 	Name   string `json:"name"`
 	Remark string `json:"remark"`
 	Key    string `json:"key"`
+	Sort   int64  `json:"sort"`
 }
 type RoleEditRequest struct {
 	Id     int64  `json:"id"`

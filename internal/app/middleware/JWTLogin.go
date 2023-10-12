@@ -52,6 +52,8 @@ func JWTLogin() gin.HandlerFunc {
 					c.Abort()
 					return
 				}
+				// 设置到上下文
+				c.Set("auth", auth)
 				c.Next()
 			}
 		}

@@ -27,12 +27,23 @@ func Add(c *gin.Context) {
 		return
 	}
 
+	auth, err := constant.GetAuth(c)
+	if err != nil {
+		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
+		return
+	}
+
 	cloudRole := &models.CloudRole{
 		RoleName:   params.Name,
 		RoleRemark: params.Remark,
 		RoleKey:    params.Key,
-		RoleSort:   0,
-		CreatTime:  time.Now().Unix(),
+		RoleSort:   params.Sort,
+		ControlBy: common.ControlBy{
+			CreateBy: auth.UID,
+		},
+		ModelTime: common.ModelTime{
+			CreatTime: time.Now().Unix(),
+		},
 	}
 	engine := db.D()
 	cnt, err := engine.Insert(cloudRole)
@@ -52,6 +63,12 @@ func Edit(c *gin.Context) {
 		return
 	}
 
+	auth, err := constant.GetAuth(c)
+	if err != nil {
+		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
+		return
+	}
+
 	cloudRole := &models.CloudRole{
 		RoleId:     params.Id,
 		RoleName:   params.Name,
@@ -59,7 +76,12 @@ func Edit(c *gin.Context) {
 		RoleKey:    params.Key,
 		RoleSort:   params.Sort,
 		Status:     params.Status,
-		UpdateTime: time.Now().Unix(),
+		ControlBy: common.ControlBy{
+			UpdateBy: auth.UID,
+		},
+		ModelTime: common.ModelTime{
+			UpdateTime: time.Now().Unix(),
+		},
 	}
 	engine := db.D()
 	cnt, err := engine.Update(cloudRole)

@@ -20,6 +20,6 @@ type Model struct {
 }
 
 type ModelTime struct {
-	CreatTime  int64 `json:"creat_time" xorm:"int(11) notnull index default(0) comment('创建时间')"`
-	UpdateTime int64 `json:"update_time" xorm:"int(11) notnull index default(0) comment('更新时间')"`
+	CreatTime  int64 `json:"creat_time" xorm:"int(11) unsigned notnull index default(0) comment('创建时间')"`
+	UpdateTime int64 `json:"update_time" xorm:"int(11) unsigned notnull index default(0) comment('更新时间')"`
 }

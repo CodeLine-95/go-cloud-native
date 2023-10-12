@@ -74,6 +74,8 @@ func Init() {
 					syncMap,
 					new(models.CloudUser),
 					new(models.CloudRole),
+					new(models.CloudRoleRule),
+					new(models.CloudMenu),
 				)
 				err := engine.Sync(syncMap)
 				if err != nil {
@@ -81,6 +83,8 @@ func Init() {
 						logz.F("table", []string{
 							new(models.CloudUser).TableName(),
 							new(models.CloudRole).TableName(),
+							new(models.CloudRoleRule).TableName(),
+							new(models.CloudMenu).TableName(),
 						}), logz.F("err", err),
 					)
 				}
