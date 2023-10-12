@@ -1,7 +1,6 @@
 package response
 
 import (
-	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
@@ -14,8 +13,9 @@ var Default = &response{}
 // Error 失败数据处理
 func Error(c *gin.Context, code int, err error, msg string) {
 	res := Default.Clone()
+	res.SetInfo(msg)
 	if err != nil {
-		res.SetMsg(err.Error())
+		res.SetInfo(err.Error())
 	}
 	if msg != "" {
 		res.SetMsg(msg)
@@ -27,9 +27,8 @@ func Error(c *gin.Context, code int, err error, msg string) {
 	xlog.Error(traceId.GetLogContext(c, msg, logz.F("err", err), logz.F("response", res)))
 	// 写入上下文
 	c.Set("result", res)
-	c.Set("status", code)
 	// 返回结果集
-	c.AbortWithStatusJSON(code, res)
+	c.AbortWithStatusJSON(http.StatusOK, res)
 }
 
 // OK 通常成功数据处理
@@ -39,15 +38,15 @@ func OK(c *gin.Context, data any, msg string) {
 	res.SetSuccess(true)
 	if msg != "" {
 		res.SetMsg(msg)
+		res.SetInfo(msg)
 	}
 	res.SetTraceID(traceId.GetTraceId(c))
-	res.SetCode(constant.Success)
+	res.SetCode(http.StatusOK)
 	// 记录日志
 	xlog.Info(traceId.GetLogContext(c, msg, logz.F("response", res)))
 	// 写入上下文
 	c.Set("result", res)
-	c.Set("status", constant.Success)
-	c.AbortWithStatusJSON(constant.Success, res)
+	c.AbortWithStatusJSON(http.StatusOK, res)
 }
 
 // PageOK 分页数据处理

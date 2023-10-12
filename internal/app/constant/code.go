@@ -8,9 +8,7 @@ const (
 	ErrorMarshalJSON   = 4
 	ErrorDB            = 5
 	ErrorNotLogin      = 6
-	ErrorNetRequest    = 7
-	ErrorIO            = 8
-	ErrorJWT           = 9
+	ErrorJWT           = 7
 
 	// ErrorParams 参数错误
 	ErrorParams = 400
@@ -28,11 +26,10 @@ const (
 	ErrorServiceUnavailable = 503
 	// ErrorGatewayTimeout 上游服务超时
 	ErrorGatewayTimeout = 504
-
+	// ErrorDBRecordExist 记录已存在
+	ErrorDBRecordExist = 200101
+	// ErrorUploadImage 文件上传错误
 	ErrorUploadImage = 200201
-
-	// ErrorDockerDataList docker
-	ErrorDockerDataList = 200301
 )
 
 var ErrorMsg = map[int]string{
@@ -46,6 +43,7 @@ var ErrorMsg = map[int]string{
 	ErrorNotLogin:      "need login",
 	ErrorUploadImage:   "upload image failed",
 	ErrorJWT:           "generate token failed",
+	ErrorDBRecordExist: "db record is exist",
 }
 
 type Error struct {

@@ -3,6 +3,7 @@ package response
 type Response struct {
 	RequestId string `json:"requestId,omitempty"`
 	Code      int32  `json:"code,omitempty"`
+	Info      string `json:"info,omitempty"`
 	Msg       string `json:"msg,omitempty"`
 	Status    string `json:"status,omitempty"`
 }
@@ -16,8 +17,12 @@ func (e *response) SetTraceID(id string) {
 	e.RequestId = id
 }
 
-func (e *response) SetMsg(s string) {
-	e.Msg = s
+func (e *response) SetMsg(msg string) {
+	e.Msg = msg
+}
+
+func (e *response) SetInfo(info string) {
+	e.Info = info
 }
 
 func (e *response) SetCode(code int32) {

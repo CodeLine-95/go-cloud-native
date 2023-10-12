@@ -3,9 +3,8 @@ package test
 import (
 	"flag"
 	"fmt"
-	"github.com/CodeLine-95/go-cloud-native/initial"
+	common "github.com/CodeLine-95/go-cloud-native/common/models"
 	"github.com/CodeLine-95/go-cloud-native/initial/store/db"
-	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/fsnotify/fsnotify"
@@ -19,7 +18,7 @@ import (
 
 func parseConfig() {
 	getwd, _ := os.Getwd()
-	config := flag.String("c", filepath.Join(filepath.Dir(getwd), "/", "conf/local.toml"), "conf")
+	config := flag.String("c", filepath.Join(filepath.Dir(getwd), "/", "configs/local.toml"), "conf")
 	flag.Parse()
 	viper.SetConfigFile(*config)
 	if err := viper.ReadInConfig(); err != nil {
@@ -30,7 +29,7 @@ func parseConfig() {
 		logz.Info("Config: conf/local.toml Changed...")
 	})
 	// 初始化数据库
-	initial.Init()
+	db.Init()
 }
 
 func TestBcrypt(t *testing.T) {
@@ -42,21 +41,18 @@ func TestBcrypt(t *testing.T) {
 	}
 	fmt.Println(string(fromPassword))
 
-	//fmt.Println(ip.ClientIP())
-
-	engine := db.Grp(constant.CloudNative)
-
-	user := models.CloudUser{
-		UserName:   "admin",
-		PassWord:   string(fromPassword),
-		UserEmail:  "admin@email.com",
-		CreateTime: time.Now().Unix(),
-		Status:     1,
+	user := &models.CloudUser{
+		UserName:  "admin",
+		PassWord:  string(fromPassword),
+		UserEmail: "admin@email.com",
+		Status:    1,
+		ModelTime: common.ModelTime{CreateTime: uint32(time.Now().Unix())},
 	}
 
-	cnt, err := engine.Insert(user)
-	if err != nil {
+	res := db.D().Create(user)
+	if res.Error != nil {
 		panic(err)
 	}
-	fmt.Println(cnt)
+
+	fmt.Println("insert row count: ", res.RowsAffected)
 }

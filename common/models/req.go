@@ -16,6 +16,7 @@ type RoleAddRequest struct {
 	Remark string `json:"remark"`
 	Key    string `json:"key"`
 	Sort   uint8  `json:"sort"`
+	Status uint8  `json:"status"`
 }
 type RoleEditRequest struct {
 	Id     int64  `json:"id"`

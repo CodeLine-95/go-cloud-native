@@ -27,6 +27,18 @@ func Add(c *gin.Context) {
 		return
 	}
 
+	// 验证roleKey标识，唯一
+	roleResp := models.CloudRole{}
+	err := db.D().Where("role_key = ?", params.Key).Find(&roleResp).Error
+	if err != nil {
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+	if roleResp.RoleKey == params.Key {
+		response.Error(c, constant.ErrorDBRecordExist, nil, constant.ErrorMsg[constant.ErrorDBRecordExist])
+		return
+	}
+
 	auth, err := constant.GetAuth(c)
 	if err != nil {
 		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
@@ -38,6 +50,7 @@ func Add(c *gin.Context) {
 		RoleRemark: params.Remark,
 		RoleKey:    params.Key,
 		RoleSort:   params.Sort,
+		Status:     params.Status,
 		ControlBy: common.ControlBy{
 			CreateBy: uint32(auth.UID),
 		},

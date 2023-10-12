@@ -8,6 +8,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/utils/ip"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
@@ -51,7 +52,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 更新用户登录信息
-	user.LoginIp = c.ClientIP()
+	user.LoginIp = ip.ClientIP(c)
 	user.LastTime = uint32(time.Now().Unix())
 	err = engine.Save(user).Error
 	if err != nil {
