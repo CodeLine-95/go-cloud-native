@@ -12,9 +12,8 @@ import (
 	"time"
 )
 
-// List 角色列表
-func List(c *gin.Context) {
-	var params common.RoleListRequest
+func RoleResp(c *gin.Context) {
+	var params common.SearchRequest
 	if err := c.ShouldBindJSON(&params); err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
@@ -22,11 +21,10 @@ func List(c *gin.Context) {
 
 	var role models.CloudRole
 	selectFields := structs.ToTags(role, "json")
-	searchFields := []string{"role_key", "role_name"}
 
 	var roleResp []*models.CloudRole
 	err := db.D().Select(selectFields).
-		Where("position(concat(?) in concat(?)) > 0", params.SearchKey, searchFields).
+		Where("position(concat(?) in concat(role_key,role_name)) > 0", params.SearchKey).
 		Scopes(base.Paginate(params.Page, params.PageSize)).
 		Find(&roleResp).Error
 	if err != nil {
@@ -34,12 +32,12 @@ func List(c *gin.Context) {
 		return
 	}
 
-	response.OK(c, roleResp, constant.ErrorMsg[constant.Success])
+	response.PageOK(c, roleResp, len(roleResp), params.Page, params.PageSize, constant.ErrorMsg[constant.Success])
 }
 
-// Add 添加角色
-func Add(c *gin.Context) {
-	var params common.RoleAddRequest
+// RoleAdd 添加角色
+func RoleAdd(c *gin.Context) {
+	var params common.RoleRequest
 	if err := c.ShouldBindJSON(&params); err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
@@ -85,9 +83,9 @@ func Add(c *gin.Context) {
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
 }
 
-// Edit 编辑角色
-func Edit(c *gin.Context) {
-	var params common.RoleEditRequest
+// RoleEdit 编辑角色
+func RoleEdit(c *gin.Context) {
+	var params common.RoleRequest
 	if err := c.ShouldBindJSON(&params); err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
@@ -122,9 +120,9 @@ func Edit(c *gin.Context) {
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
 }
 
-// Del 删除角色
-func Del(c *gin.Context) {
-	var params models.CloudRole
+// RoleDel 删除角色
+func RoleDel(c *gin.Context) {
+	var params common.RoleRequest
 	if err := c.ShouldBindJSON(&params); err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return

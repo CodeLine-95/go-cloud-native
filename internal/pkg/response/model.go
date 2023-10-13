@@ -37,8 +37,8 @@ func (e *response) SetSuccess(success bool) {
 
 type Page struct {
 	Count     int `json:"count"`
-	PageIndex int `json:"pageIndex"`
-	PageSize  int `json:"pageSize"`
+	PageIndex int `json:"page_index"`
+	PageSize  int `json:"page_size"`
 }
 
 type page struct {

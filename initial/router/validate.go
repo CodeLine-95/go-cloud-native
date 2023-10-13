@@ -12,15 +12,18 @@ func Validate(r *gin.RouterGroup) {
 
 func RoleRouter(r *gin.RouterGroup) {
 	c := r.Group("/role")
-	c.GET("/list", logic.List)
-	c.POST("/add", logic.Add)
-	c.POST("/edit", logic.Edit)
-	c.POST("/del", logic.Del)
+	c.GET("/list", logic.RoleResp)
+	c.POST("/add", logic.RoleAdd)
+	c.POST("/edit", logic.RoleEdit)
+	c.POST("/del", logic.RoleDel)
 }
 
 func MenuRouter(r *gin.RouterGroup) {
-	//c := r.Group("/menu")
-	//c.GET("/list")
+	c := r.Group("/menu")
+	c.GET("/list", logic.MenuResp)
+	c.GET("/add", logic.MenuAdd)
+	c.GET("/edit", logic.MenuEdit)
+	c.GET("/del", logic.MenuDel)
 }
 
 //func DockerRouter(r *gin.RouterGroup) {

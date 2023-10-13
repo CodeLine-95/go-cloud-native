@@ -5,26 +5,18 @@ type LoginRequest struct {
 	PassWord string `json:"pass_word"`
 }
 
-type RoleListRequest struct {
-	SearchKey string `json:"search_key"`
-	Page      int    `json:"page"`
-	PageSize  int    `json:"page_size"`
+type SearchRequest struct {
+	SearchKey string `json:"search_key,omitempty"`
+	Page      int    `json:"page,omitempty"`
+	PageSize  int    `json:"page_size,omitempty"`
 }
-
-type RoleAddRequest struct {
-	Name   string `json:"name"`
-	Remark string `json:"remark"`
-	Key    string `json:"key"`
-	Sort   uint8  `json:"sort"`
-	Status uint8  `json:"status"`
-}
-type RoleEditRequest struct {
-	Id     int64  `json:"id"`
-	Name   string `json:"name"`
-	Remark string `json:"remark"`
-	Key    string `json:"key"`
-	Sort   uint8  `json:"sort"`
-	Status uint8  `json:"status"`
+type RoleRequest struct {
+	Id     int    `json:"id,omitempty"`
+	Name   string `json:"name,omitempty"`
+	Remark string `json:"remark,omitempty"`
+	Key    string `json:"key,omitempty"`
+	Sort   uint8  `json:"sort,omitempty"`
+	Status uint8  `json:"status,omitempty"`
 }
 
 type ContainerStopRequest struct {
@@ -33,4 +25,12 @@ type ContainerStopRequest struct {
 
 type ImagesPullRequest struct {
 	Refstr string `json:"refstr"`
+}
+
+type MenuListRequest struct {
+}
+
+type MenuAddRequest struct {
+}
+type MenuEditRequest struct {
 }
