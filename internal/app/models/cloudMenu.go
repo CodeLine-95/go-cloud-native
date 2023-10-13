@@ -1,6 +1,9 @@
 package models
 
-import common "github.com/CodeLine-95/go-cloud-native/common/models"
+import (
+	"encoding/json"
+	common "github.com/CodeLine-95/go-cloud-native/common/models"
+)
 
 type CloudMenu struct {
 	MenuId     uint32 `json:"menu_id" gorm:"primaryKey;autoIncrement;comment:唯一编号"`
@@ -23,4 +26,20 @@ type CloudMenu struct {
 
 func (c CloudMenu) TableName() string {
 	return "cloud_menu"
+}
+
+func (c *CloudMenu) ParseFields(p any) *CloudMenu {
+	if p == nil {
+		return c
+	}
+	pjson, err := json.Marshal(p)
+	if err != nil {
+		return c
+	}
+
+	err = json.Unmarshal(pjson, c)
+	if err != nil {
+		return c
+	}
+	return c
 }

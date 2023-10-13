@@ -44,13 +44,13 @@ func RoleAdd(c *gin.Context) {
 	}
 
 	// 验证roleKey标识，唯一
-	roleResp := models.CloudRole{}
-	err := db.D().Where("role_key = ?", params.Key).Find(&roleResp).Error
+	cloudRole := models.CloudRole{}
+	err := db.D().Where("role_key = ?", params.RoleKey).Find(&cloudRole).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
-	if roleResp.RoleKey == params.Key {
+	if cloudRole.RoleKey == params.RoleKey {
 		response.Error(c, constant.ErrorDBRecordExist, nil, constant.ErrorMsg[constant.ErrorDBRecordExist])
 		return
 	}
@@ -61,20 +61,11 @@ func RoleAdd(c *gin.Context) {
 		return
 	}
 
-	cloudRole := &models.CloudRole{
-		RoleName:   params.Name,
-		RoleRemark: params.Remark,
-		RoleKey:    params.Key,
-		RoleSort:   params.Sort,
-		Status:     params.Status,
-		ControlBy: common.ControlBy{
-			CreateBy: uint32(auth.UID),
-		},
-		ModelTime: common.ModelTime{
-			CreateTime: uint32(time.Now().Unix()),
-		},
-	}
-	res := db.D().Create(cloudRole)
+	cloudRole.ParseFields(params)
+	cloudRole.SetCreateBy(uint32(auth.UID))
+	cloudRole.CreateTime = uint32(time.Now().Unix())
+
+	res := db.D().Create(&cloudRole)
 	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
@@ -97,21 +88,13 @@ func RoleEdit(c *gin.Context) {
 		return
 	}
 
-	cloudRole := &models.CloudRole{
-		RoleId:     uint32(params.Id),
-		RoleName:   params.Name,
-		RoleRemark: params.Remark,
-		RoleKey:    params.Key,
-		RoleSort:   params.Sort,
-		Status:     params.Status,
-		ControlBy: common.ControlBy{
-			UpdateBy: uint32(auth.UID),
-		},
-		ModelTime: common.ModelTime{
-			UpdateTime: uint32(time.Now().Unix()),
-		},
-	}
-	res := db.D().Updates(cloudRole)
+	var cloudRole models.CloudRole
+
+	cloudRole.ParseFields(params)
+	cloudRole.SetUpdateBy(uint32(auth.UID))
+	cloudRole.UpdateTime = uint32(time.Now().Unix())
+
+	res := db.D().Updates(&cloudRole)
 	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
@@ -127,8 +110,9 @@ func RoleDel(c *gin.Context) {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
 	}
-
-	err := db.D().Delete(params).Error
+	var cloudRole models.CloudRole
+	cloudRole.ParseFields(params)
+	err := db.D().Delete(cloudRole).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return

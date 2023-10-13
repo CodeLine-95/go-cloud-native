@@ -1,6 +1,9 @@
 package models
 
-import common "github.com/CodeLine-95/go-cloud-native/common/models"
+import (
+	"encoding/json"
+	common "github.com/CodeLine-95/go-cloud-native/common/models"
+)
 
 type CloudRole struct {
 	RoleId     uint32 `json:"role_id" gorm:"primaryKey;autoIncrement;comment:唯一编号"`
@@ -15,4 +18,20 @@ type CloudRole struct {
 
 func (c CloudRole) TableName() string {
 	return "cloud_role"
+}
+
+func (c *CloudRole) ParseFields(p any) *CloudRole {
+	if p == nil {
+		return c
+	}
+	pjson, err := json.Marshal(p)
+	if err != nil {
+		return c
+	}
+
+	err = json.Unmarshal(pjson, c)
+	if err != nil {
+		return c
+	}
+	return c
 }
