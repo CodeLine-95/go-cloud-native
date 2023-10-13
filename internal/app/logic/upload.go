@@ -28,11 +28,9 @@ func Upload(c *gin.Context) {
 
 	// 保存文件
 	if saveErr := c.SaveUploadedFile(file, filePath); saveErr != nil {
-		response.Error(c, constant.ErrorUploadImage, saveErr, "文件上传失败")
+		response.Error(c, constant.ErrorUploadImage, saveErr, constant.ErrorMsg[constant.ErrorUploadImage])
 		return
 	}
 
-	response.OK(c, gin.H{
-		"fileUrl": filePath,
-	}, constant.ErrorMsg[constant.Success])
+	response.OK(c, gin.H{"fileUrl": filePath}, constant.ErrorMsg[constant.Success])
 }

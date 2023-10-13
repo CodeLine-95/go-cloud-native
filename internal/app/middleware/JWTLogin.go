@@ -2,7 +2,9 @@ package middleware
 
 import (
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
@@ -33,23 +35,13 @@ func JWTLogin() gin.HandlerFunc {
 				token := jwt.GetToken(c.Request, "")
 				// 验证token非空
 				if token == "" {
-					c.AbortWithStatusJSON(http.StatusOK, constant.Response{
-						ErrNo: constant.ErrorNotLogin,
-						Msg:   constant.ErrorMsg[constant.ErrorNotLogin],
-						Data:  nil,
-					})
-					c.Abort()
+					response.Error(c, http.StatusOK, err, constant.ErrorMsg[constant.ErrorNotLogin])
 					return
 				}
 				// token验证是否失效
-				auth := token.Decode(constant.JwtSignKey, false)
+				auth := token.Decode(base.JwtSignKey, false)
 				if auth == nil {
-					c.AbortWithStatusJSON(http.StatusOK, constant.Response{
-						ErrNo: constant.ErrorNotLogin,
-						Msg:   constant.ErrorMsg[constant.ErrorNotLogin],
-						Data:  nil,
-					})
-					c.Abort()
+					response.Error(c, http.StatusOK, err, constant.ErrorMsg[constant.ErrorNotLogin])
 					return
 				}
 				// 设置到上下文

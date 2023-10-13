@@ -45,7 +45,7 @@ func Login(c *gin.Context) {
 		Foo:  utils.RandStringRunes(10),
 	}
 
-	token, err := auth.Encode(constant.JwtSignKey)
+	token, err := auth.Encode(base.JwtSignKey)
 	if err != nil {
 		response.Error(c, constant.ErrorJWT, err, constant.ErrorMsg[constant.ErrorJWT])
 		return

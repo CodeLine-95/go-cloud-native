@@ -7,8 +7,8 @@ type LoginRequest struct {
 
 type RoleListRequest struct {
 	SearchKey string `json:"search_key"`
-	Page      int64  `json:"page"`
-	PageSize  int64  `json:"page_size"`
+	Page      int    `json:"page"`
+	PageSize  int    `json:"page_size"`
 }
 
 type RoleAddRequest struct {

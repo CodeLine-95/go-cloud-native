@@ -7,7 +7,6 @@ import (
 
 func Validate(r *gin.RouterGroup) {
 	RoleRouter(r)
-	DockerRouter(r)
 	MenuRouter(r)
 }
 
@@ -19,17 +18,17 @@ func RoleRouter(r *gin.RouterGroup) {
 	c.POST("/del", logic.Del)
 }
 
-func DockerRouter(r *gin.RouterGroup) {
-	dockerApi := logic.DockerApi{}
-	docker := r.Group("/docker")
-	docker.GET("/container-list", dockerApi.GetContainerList)
-	docker.POST("/container-logs", dockerApi.ContainerLogs)
-
-	docker.GET("/images-list", dockerApi.GetImageList)
-	docker.POST("/images-pull", dockerApi.ImagePull)
-}
-
 func MenuRouter(r *gin.RouterGroup) {
 	//c := r.Group("/menu")
 	//c.GET("/list")
 }
+
+//func DockerRouter(r *gin.RouterGroup) {
+//	dockerApi := logic.DockerApi{}
+//	docker := r.Group("/docker")
+//	docker.GET("/container-list", dockerApi.GetContainerList)
+//	docker.POST("/container-logs", dockerApi.ContainerLogs)
+//
+//	docker.GET("/images-list", dockerApi.GetImageList)
+//	docker.POST("/images-pull", dockerApi.ImagePull)
+//}

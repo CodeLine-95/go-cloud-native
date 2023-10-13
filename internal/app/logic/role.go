@@ -5,7 +5,9 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/initial/store/db"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
+	"github.com/CodeLine-95/go-cloud-native/tools/structs"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -17,6 +19,22 @@ func List(c *gin.Context) {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
 	}
+
+	var role models.CloudRole
+	selectFields := structs.ToTags(role, "json")
+	searchFields := []string{"role_key", "role_name"}
+
+	var roleResp []*models.CloudRole
+	err := db.D().Select(selectFields).
+		Where("position(concat(?) in concat(?)) > 0", params.SearchKey, searchFields).
+		Scopes(base.Paginate(params.Page, params.PageSize)).
+		Find(&roleResp).Error
+	if err != nil {
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+
+	response.OK(c, roleResp, constant.ErrorMsg[constant.Success])
 }
 
 // Add 添加角色
@@ -39,7 +57,7 @@ func Add(c *gin.Context) {
 		return
 	}
 
-	auth, err := constant.GetAuth(c)
+	auth, err := base.GetAuth(c)
 	if err != nil {
 		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
 		return
@@ -75,7 +93,7 @@ func Edit(c *gin.Context) {
 		return
 	}
 
-	auth, err := constant.GetAuth(c)
+	auth, err := base.GetAuth(c)
 	if err != nil {
 		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
 		return
