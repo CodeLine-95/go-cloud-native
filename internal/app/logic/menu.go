@@ -13,26 +13,26 @@ import (
 )
 
 func MenuResp(c *gin.Context) {
-	var params common.SearchRequest
-	if err := c.ShouldBindJSON(&params); err != nil {
-		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
-		return
-	}
+	//var params common.SearchRequest
+	//if err := c.ShouldBindJSON(&params); err != nil {
+	//	response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+	//	return
+	//}
 
 	var menu models.CloudMenu
 	selectFields := structs.ToTags(menu, "json")
 
-	var menuResp []*models.CloudMenu
-	err := db.D().Select(selectFields).
-		Where("position(concat(?) in concat(menu_name,menu_path,menu_title)) > 0", params.SearchKey).
-		Scopes(base.Paginate(params.Page, params.PageSize)).
-		Find(&menuResp).Error
+	var menuResp models.CloudMenuTree
+	err := db.D().Select(selectFields).Find(&menuResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
 
-	response.PageOK(c, menuResp, len(menuResp), params.Page, params.PageSize, constant.ErrorMsg[constant.Success])
+	// 生成权限二叉树
+	menuResp = menuResp.TreeNode()
+
+	response.OK(c, menuResp, constant.ErrorMsg[constant.Success])
 }
 
 func MenuAdd(c *gin.Context) {
@@ -53,7 +53,7 @@ func MenuAdd(c *gin.Context) {
 	cloudMenu.SetCreateBy(uint32(auth.UID))
 	cloudMenu.CreateTime = uint32(time.Now().Unix())
 
-	res := db.D().Create(cloudMenu)
+	res := db.D().Create(&cloudMenu)
 	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
@@ -97,7 +97,7 @@ func MenuDel(c *gin.Context) {
 	}
 	var cloudMenu models.CloudMenu
 	cloudMenu.ParseFields(params)
-	err := db.D().Delete(cloudMenu).Error
+	err := db.D().Delete(&cloudMenu).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return

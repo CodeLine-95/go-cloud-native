@@ -26,12 +26,12 @@ type MenuRequest struct {
 	MenuIcon   string `json:"menu_icon,omitempty"`
 	MenuPath   string `json:"menu_path,omitempty"`
 	PathGroup  string `json:"path_group,omitempty"`
-	menuType   string `json:"menu_type,omitempty"`
+	MenuType   string `json:"menu_type,omitempty"`
 	MenuMethod string `json:"menu_method,omitempty"`
 	Permission string `json:"permission,omitempty"`
 	ParentId   uint32 `json:"parent_id,omitempty"`
 	Component  string `json:"component,omitempty"`
-	MenuSort   uint8  `json:"permission,omitempty"`
+	MenuSort   uint8  `json:"menu_sort,omitempty"`
 	Visible    uint8  `json:"visible,omitempty"`
 	IsFrame    uint8  `json:"is_frame,omitempty"`
 }

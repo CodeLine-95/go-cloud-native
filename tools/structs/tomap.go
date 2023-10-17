@@ -4,6 +4,8 @@ import (
 	"reflect"
 )
 
+const jsonFilter = "child_node"
+
 func ToMap(item any) map[string]any {
 	if isNil(item) {
 		return nil
@@ -34,7 +36,7 @@ func ToTags(c any, tagName string) (fields []string) {
 
 	for _, val := range tagFields {
 		tagValue := val.Tag.Get(tagName)
-		if tagValue != "" {
+		if tagValue != "" && tagValue != jsonFilter {
 			fields = append(fields, tagValue)
 		}
 	}

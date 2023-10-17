@@ -21,9 +21,9 @@ func RoleRouter(r *gin.RouterGroup) {
 func MenuRouter(r *gin.RouterGroup) {
 	c := r.Group("/menu")
 	c.GET("/list", logic.MenuResp)
-	c.GET("/add", logic.MenuAdd)
-	c.GET("/edit", logic.MenuEdit)
-	c.GET("/del", logic.MenuDel)
+	c.POST("/add", logic.MenuAdd)
+	c.POST("/edit", logic.MenuEdit)
+	c.POST("/del", logic.MenuDel)
 }
 
 //func DockerRouter(r *gin.RouterGroup) {
