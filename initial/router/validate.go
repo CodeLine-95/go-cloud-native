@@ -5,11 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// 入口
 func Validate(r *gin.RouterGroup) {
 	RoleRouter(r)
 	MenuRouter(r)
+	AllocationRouter(r)
 }
 
+// 角色
 func RoleRouter(r *gin.RouterGroup) {
 	c := r.Group("/role")
 	c.GET("/list", logic.RoleResp)
@@ -18,12 +21,20 @@ func RoleRouter(r *gin.RouterGroup) {
 	c.POST("/del", logic.RoleDel)
 }
 
+// 菜单
 func MenuRouter(r *gin.RouterGroup) {
 	c := r.Group("/menu")
 	c.GET("/list", logic.MenuResp)
 	c.POST("/add", logic.MenuAdd)
 	c.POST("/edit", logic.MenuEdit)
 	c.POST("/del", logic.MenuDel)
+}
+
+// 分配
+func AllocationRouter(r *gin.RouterGroup) {
+	c := r.Group("/allocation")
+	c.POST("/user-role", logic.UserRole)
+	c.POST("/role-menu", logic.RoleMenu)
 }
 
 //func DockerRouter(r *gin.RouterGroup) {

@@ -44,7 +44,7 @@ func RoleAdd(c *gin.Context) {
 	}
 
 	// 验证roleKey标识，唯一
-	cloudRole := models.CloudRole{}
+	var cloudRole models.CloudRole
 	err := db.D().Where("role_key = ?", params.RoleKey).Find(&cloudRole).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])

@@ -36,6 +36,17 @@ type MenuRequest struct {
 	IsFrame    uint8  `json:"is_frame,omitempty"`
 }
 
+type UserRoleRequest struct {
+	UID      uint32 `json:"uid"`
+	RoleId   uint32 `json:"role_id"`
+	IsUpdate uint8  `json:"is_update"`
+}
+
+type RoleMenuRequest struct {
+	RoleId uint32 `json:"role_id"`
+	MenuId uint32 `json:"menu_id"`
+}
+
 type ContainerStopRequest struct {
 	Ids string `json:"ids"`
 }

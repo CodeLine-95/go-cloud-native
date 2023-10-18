@@ -13,12 +13,6 @@ import (
 )
 
 func MenuResp(c *gin.Context) {
-	//var params common.SearchRequest
-	//if err := c.ShouldBindJSON(&params); err != nil {
-	//	response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
-	//	return
-	//}
-
 	var menu models.CloudMenu
 	selectFields := structs.ToTags(menu, "json")
 

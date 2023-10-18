@@ -60,7 +60,6 @@ func (c CloudMenuTree) TreeNode() CloudMenuTree {
 		TreeMenuData[item.MenuId] = item
 	}
 	var TreeNode CloudMenuTree
-
 	for _, val := range TreeMenuData {
 		if val.ParentId == 0 {
 			TreeNode = append(TreeNode, val)
@@ -68,13 +67,11 @@ func (c CloudMenuTree) TreeNode() CloudMenuTree {
 		}
 		if p_item, ok := TreeMenuData[val.ParentId]; ok {
 			if p_item.ChildNode == nil {
-				childNode := &CloudMenuTree{val}
-				p_item.ChildNode = childNode
+				p_item.ChildNode = &CloudMenuTree{val}
 				continue
 			}
 			*p_item.ChildNode = append(*p_item.ChildNode, val)
 		}
-
 	}
 	return TreeNode
 }

@@ -113,8 +113,9 @@ func Init() {
 					syncMap,
 					models.CloudUser{},
 					models.CloudRole{},
-					models.CloudRoleRule{},
+					models.CloudRoleMenu{},
 					models.CloudMenu{},
+					models.CloudUserRole{},
 				)
 				err := engine.AutoMigrate(syncMap...)
 				if err != nil {
@@ -122,8 +123,9 @@ func Init() {
 						logz.F("table", []string{
 							new(models.CloudUser).TableName(),
 							new(models.CloudRole).TableName(),
-							new(models.CloudRoleRule).TableName(),
+							new(models.CloudRoleMenu).TableName(),
 							new(models.CloudMenu).TableName(),
+							new(models.CloudUserRole).TableName(),
 						}), logz.F("err", err),
 					)
 				}
