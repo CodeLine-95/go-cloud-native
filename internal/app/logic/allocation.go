@@ -8,6 +8,8 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/gin-gonic/gin"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -52,21 +54,37 @@ func RoleMenu(c *gin.Context) {
 		return
 	}
 
+	if params.RoleId == 0 || params.MenuIds == "" {
+		response.Error(c, constant.ErrorParams, nil, constant.ErrorMsg[constant.ErrorParams])
+		return
+	}
+
 	auth, err := base.GetAuth(c)
 	if err != nil {
 		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
 		return
 	}
 
-	var cloudRoleMenu models.CloudRoleMenu
-	db.D().Where("role_id = ?", params.RoleId).Delete(cloudRoleMenu)
+	// 每次创建时，清空当前角色的权限关系，重新插入
+	db.D().Where("role_id = ?", params.RoleId).Delete(models.CloudRoleMenu{})
 
-	cloudRoleMenu.ParseFields(params)
-	cloudRoleMenu.SetCreateBy(uint32(auth.UID))
-	cloudRoleMenu.CreateTime = uint32(time.Now().Unix())
-	cloudRoleMenu.SetUpdateBy(uint32(auth.UID))
-	cloudRoleMenu.UpdateTime = uint32(time.Now().Unix())
-
+	var cloudRoleMenu []*models.CloudRoleMenu
+	menuIdList := strings.Split(params.MenuIds, ",")
+	for _, val := range menuIdList {
+		menuId, _ := strconv.Atoi(val)
+		cloudRoleMenu = append(cloudRoleMenu, &models.CloudRoleMenu{
+			RoleId: params.RoleId,
+			MenuId: uint32(menuId),
+			ControlBy: common.ControlBy{
+				CreateBy: uint32(auth.UID),
+				UpdateBy: uint32(auth.UID),
+			},
+			ModelTime: common.ModelTime{
+				CreateTime: uint32(time.Now().Unix()),
+				UpdateTime: uint32(time.Now().Unix()),
+			},
+		})
+	}
 	res := db.D().Create(&cloudRoleMenu)
 	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])

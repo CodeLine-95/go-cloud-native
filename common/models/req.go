@@ -43,8 +43,8 @@ type UserRoleRequest struct {
 }
 
 type RoleMenuRequest struct {
-	RoleId uint32 `json:"role_id"`
-	MenuId uint32 `json:"menu_id"`
+	RoleId  uint32 `json:"role_id"`
+	MenuIds string `json:"menu_ids"`
 }
 
 type ContainerStopRequest struct {
