@@ -29,14 +29,10 @@ func UserRole(c *gin.Context) {
 	var cloudUserRole models.CloudUserRole
 	cloudUserRole.ParseFields(params)
 
-	// 验证是否是更新
-	if params.IsUpdate == 1 {
-		cloudUserRole.SetUpdateBy(uint32(auth.UID))
-		cloudUserRole.UpdateTime = uint32(time.Now().Unix())
-	} else {
-		cloudUserRole.SetCreateBy(uint32(auth.UID))
-		cloudUserRole.CreateTime = uint32(time.Now().Unix())
-	}
+	cloudUserRole.SetCreateBy(uint32(auth.UID))
+	cloudUserRole.CreateTime = uint32(time.Now().Unix())
+	cloudUserRole.SetUpdateBy(uint32(auth.UID))
+	cloudUserRole.UpdateTime = uint32(time.Now().Unix())
 
 	res := db.D().Save(&cloudUserRole)
 	if res.RowsAffected == 0 || res.Error != nil {

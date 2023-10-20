@@ -43,14 +43,16 @@ func RoleAdd(c *gin.Context) {
 		return
 	}
 
-	// 验证roleKey标识，唯一
 	var cloudRole models.CloudRole
-	err := db.D().Where("role_key = ?", params.RoleKey).Find(&cloudRole).Error
+
+	// 验证roleKey标识，唯一
+	var count int64
+	err := db.D().Model(cloudRole).Where("role_key = ?", params.RoleKey).Count(&count).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
-	if cloudRole.RoleKey == params.RoleKey {
+	if count > 0 {
 		response.Error(c, constant.ErrorDBRecordExist, nil, constant.ErrorMsg[constant.ErrorDBRecordExist])
 		return
 	}

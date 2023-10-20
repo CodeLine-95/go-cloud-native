@@ -37,9 +37,8 @@ type MenuRequest struct {
 }
 
 type UserRoleRequest struct {
-	UID      uint32 `json:"uid"`
-	RoleId   uint32 `json:"role_id"`
-	IsUpdate uint8  `json:"is_update"`
+	UID    uint32 `json:"uid"`
+	RoleId uint32 `json:"role_id"`
 }
 
 type RoleMenuRequest struct {
