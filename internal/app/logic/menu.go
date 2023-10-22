@@ -110,8 +110,13 @@ func GetRoleMenu(c *gin.Context) {
 
 	var roleMenu []*models.CloudRoleMenu
 	res := db.D().Where("role_id = ?", params.RoleId).Find(&roleMenu)
-	if res.RowsAffected == 0 || res.Error != nil {
+	if res.Error != nil {
 		response.Error(c, constant.ErrorDB, res.Error, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+
+	if res.RowsAffected == 0 {
+		response.OK(c, roleMenu, constant.ErrorMsg[constant.Success])
 		return
 	}
 
