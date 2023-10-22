@@ -9,6 +9,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/tools/structs"
 	"github.com/gin-gonic/gin"
+	"strings"
 	"time"
 )
 
@@ -98,4 +99,43 @@ func MenuDel(c *gin.Context) {
 	}
 
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
+}
+
+func GetRoleMenu(c *gin.Context) {
+	var params common.RoleMenuRequest
+	if err := c.ShouldBindJSON(&params); err != nil {
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
+	}
+
+	var roleMenu []*models.CloudRoleMenu
+	res := db.D().Where("role_id = ?", params.RoleId).Find(&roleMenu)
+	if res.RowsAffected == 0 || res.Error != nil {
+		response.Error(c, constant.ErrorDB, res.Error, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+
+	menuIds := []string{}
+	for _, val := range roleMenu {
+		menuIds = append(menuIds, string(val.RoleId))
+	}
+
+	if len(menuIds) <= 0 {
+		response.Error(c, constant.Fail, nil, constant.ErrorMsg[constant.Fail])
+		return
+	}
+
+	var cloudMenu []*models.CloudMenu
+	selectFields := structs.ToTags(cloudMenu, "json")
+
+	var menuResp models.CloudMenuTree
+	err := db.D().Select(selectFields).Where("menu_id in (?)", strings.Join(menuIds, ",")).Find(&menuResp).Error
+	if err != nil {
+		response.Error(c, constant.ErrorDB, res.Error, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+	// 生成权限二叉树
+	menuResp = menuResp.TreeNode()
+
+	response.OK(c, menuResp, constant.ErrorMsg[constant.Success])
 }
