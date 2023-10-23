@@ -45,7 +45,14 @@ func init() {
 	}
 
 	once.Do(func() {
-		if len(CasbinServiceApp.Type) == 0 {
+		switch CasbinServiceApp.Type {
+		case RBAC_DEFAULT:
+			CasbinServiceApp.Type = RBAC_DEFAULT
+		case RBAC_DOMAINS:
+			CasbinServiceApp.Type = RBAC_DOMAINS
+		case RBAC_RESOURCE:
+			CasbinServiceApp.Type = RBAC_RESOURCE
+		default:
 			CasbinServiceApp.Type = RBAC_DEFAULT
 		}
 		// 通过现有的gorm实例和指定的表前缀和表名创建gorm适配器
