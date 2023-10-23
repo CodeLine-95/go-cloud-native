@@ -10,7 +10,11 @@ import (
 var handlersFuncMap []gin.HandlerFunc
 
 func init() {
-	handlersFuncMap = append(handlersFuncMap, middleware.JWTLogin())
+	handlersFuncMap = append(
+		handlersFuncMap,
+		middleware.JWTLogin(),
+		middleware.Policy(),
+	)
 }
 
 func InitRouter(r *gin.Engine) *gin.Engine {
