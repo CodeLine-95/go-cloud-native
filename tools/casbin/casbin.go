@@ -45,6 +45,9 @@ func init() {
 	}
 
 	once.Do(func() {
+		if len(CasbinServiceApp.Type) == 0 {
+			CasbinServiceApp.Type = RBAC_DEFAULT
+		}
 		// 通过现有的gorm实例和指定的表前缀和表名创建gorm适配器
 		a, _ := gormadapter.NewAdapterByDBUseTableName(CasbinServiceApp.DB, CasbinServiceApp.Prefix, CasbinServiceApp.TableName)
 		// policy 初始化持久化到 DB
