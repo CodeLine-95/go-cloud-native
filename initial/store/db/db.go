@@ -32,6 +32,7 @@ type (
 		MaxIdleConn int
 		MaxOpenConn int
 		AutoLoad    bool
+		Debug       bool
 	}
 )
 
@@ -74,7 +75,7 @@ func Init() {
 				TranslateError: true,
 			}
 			// 打印全部SQL
-			if viper.GetBool("app.debug") {
+			if instanceCfg.Debug {
 				engineConfig.Logger = logger.Default.LogMode(logger.Info)
 			}
 			// 链接数据库

@@ -19,3 +19,4 @@
         maxIdleConn = 5        # 最大空闲链接数
         maxOpenConn = 10       # 最大并发链接数
         autoLoad = "true"      # 自动同步数据表
+        debug = "false"        # 是否打开数据库DeBug

@@ -5,10 +5,13 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
 const (
+	DIR_PATH      = "tools/casbin"
+	CONF_PATH     = "conf"
 	RBAC_DEFAULT  = "rbac_default"
 	RBAC_DOMAINS  = "rbac_domains"
 	RBAC_RESOURCE = "rbac_resource_roles"
@@ -21,8 +24,6 @@ type CasbinService struct {
 	TableName string   // 自定义表名
 }
 
-var CasbinServiceApp = new(CasbinService)
-
 var confMap map[string]string
 
 // 持久化到数据库
@@ -33,32 +34,38 @@ var (
 )
 
 // init 自动初始化
-func init() {
+func (c *CasbinService) Init() {
 	pwd, _ := os.Getwd()
+	// 切换到指定目录下
+	_ = os.Chdir(pwd + "/" + DIR_PATH)
+	// 重新获取当前目录
+	pwd, _ = os.Getwd()
+	path := pwd + "/" + CONF_PATH
 	//获取文件或目录相关信息
-	fileInfoList, err := os.ReadDir(pwd + "/conf")
+	fileInfoList, err := os.ReadDir(filepath.Clean(filepath.ToSlash(path)))
 	if err != nil {
 		panic(err)
 	}
+	confMap = make(map[string]string, len(fileInfoList))
 	for i := range fileInfoList {
 		confMap[fileInfoList[i].Name()] = fileInfoList[i].Name()
 	}
 
 	once.Do(func() {
-		switch CasbinServiceApp.Type {
+		switch c.Type {
 		case RBAC_DEFAULT:
-			CasbinServiceApp.Type = RBAC_DEFAULT
+			c.Type = RBAC_DEFAULT
 		case RBAC_DOMAINS:
-			CasbinServiceApp.Type = RBAC_DOMAINS
+			c.Type = RBAC_DOMAINS
 		case RBAC_RESOURCE:
-			CasbinServiceApp.Type = RBAC_RESOURCE
+			c.Type = RBAC_RESOURCE
 		default:
-			CasbinServiceApp.Type = RBAC_DEFAULT
+			c.Type = RBAC_DEFAULT
 		}
 		// 通过现有的gorm实例和指定的表前缀和表名创建gorm适配器
-		a, _ := gormadapter.NewAdapterByDBUseTableName(CasbinServiceApp.DB, CasbinServiceApp.Prefix, CasbinServiceApp.TableName)
+		a, _ := gormadapter.NewAdapterByDBUseTableName(c.DB, c.Prefix, c.TableName)
 		// policy 初始化持久化到 DB
-		syncecEnforcer, _ = casbin.NewSyncedEnforcer(confMap[CasbinServiceApp.Type], a)
+		syncecEnforcer, _ = casbin.NewSyncedEnforcer(path+"/"+confMap[c.Type+".conf"], a)
 	})
 
 	// 从DB中 load 策略
