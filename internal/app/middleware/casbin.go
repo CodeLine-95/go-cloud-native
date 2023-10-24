@@ -43,7 +43,7 @@ func Policy() gin.HandlerFunc {
 		sub := userRole.RoleId
 
 		// 验证当前访问策略
-		if ok := policy.Initialize().Checked(sub, obj, act); !ok {
+		if ok := policy.Casbin().Checked(sub, obj, act); !ok {
 			response.Error(c, http.StatusOK, nil, constant.ErrorMsg[constant.ErrorNotLogin])
 			return
 		}

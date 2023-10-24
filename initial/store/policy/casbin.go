@@ -19,6 +19,6 @@ func Init() {
 }
 
 // 获取初始化后的句柄
-func Initialize() *policy.CasbinService {
+func Casbin() *policy.CasbinService {
 	return e
 }
