@@ -7,15 +7,21 @@ import (
 
 // 入口
 func Validate(r *gin.RouterGroup) {
+	userRouter(r)
 	roleRouter(r)
 	menuRouter(r)
 	allocationRouter(r)
 }
 
+func userRouter(r *gin.RouterGroup) {
+	c := r.Group("/user")
+	c.GET("info", logic.GetUserInfo)
+}
+
 // 角色
 func roleRouter(r *gin.RouterGroup) {
 	c := r.Group("/role")
-	c.GET("/list", logic.RoleResp)
+	c.POST("/list", logic.RoleResp)
 	c.POST("/add", logic.RoleAdd)
 	c.POST("/edit", logic.RoleEdit)
 	c.POST("/del", logic.RoleDel)
@@ -24,11 +30,11 @@ func roleRouter(r *gin.RouterGroup) {
 // 菜单
 func menuRouter(r *gin.RouterGroup) {
 	c := r.Group("/menu")
-	c.GET("/list", logic.MenuResp)
+	c.POST("/list", logic.MenuResp)
 	c.POST("/add", logic.MenuAdd)
 	c.POST("/edit", logic.MenuEdit)
 	c.POST("/del", logic.MenuDel)
-	c.GET("/role-list", logic.GetRoleMenu)
+	c.POST("/role-list", logic.GetRoleMenu)
 }
 
 // 分配

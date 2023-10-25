@@ -14,6 +14,12 @@ import (
 )
 
 func MenuResp(c *gin.Context) {
+	var params common.MenuRouterReqest
+	if err := c.ShouldBindJSON(&params); err != nil {
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
+	}
+
 	var menu models.CloudMenu
 	selectFields := structs.ToTags(menu, "json")
 
@@ -24,8 +30,10 @@ func MenuResp(c *gin.Context) {
 		return
 	}
 
-	// 生成权限二叉树
-	menuResp = menuResp.TreeNode()
+	if params.IsTree == 1 {
+		// 生成权限二叉树
+		menuResp = menuResp.TreeNode()
+	}
 
 	response.OK(c, menuResp, constant.ErrorMsg[constant.Success])
 }

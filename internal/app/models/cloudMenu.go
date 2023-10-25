@@ -12,13 +12,14 @@ type CloudMenu struct {
 	MenuIcon   string `json:"menu_icon" gorm:"size:128;not null;default:'';comment:菜单图标"`
 	MenuPath   string `json:"menu_path" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单路径"`
 	PathGroup  string `json:"path_group" gorm:"size:255;not null;default:'';comment:菜单路径组"`
-	MenuType   string `json:"menu_type" gorm:"size:255;not null;default:'';comment:菜单类型"`
+	MenuType   string `json:"menu_type" gorm:"size:255;not null;default:'';comment:菜单类型：D目录、M模块、C按钮"`
 	MenuMethod string `json:"menu_method" gorm:"size:16;not null;default:'';comment:菜单请求类型"`
 	Permission string `json:"permission" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单权限标识"`
 	ParentId   uint32 `json:"parent_id" gorm:"index;not null;default:0;comment:父级ID"`
 	Component  string `json:"component" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单组件"`
 	MenuSort   uint8  `json:"menu_sort" gorm:"index;not null;default:0;comment:菜单排序"`
 	Visible    uint8  `json:"visible" gorm:"index;not null;default:0;comment:菜单是否显示：0显示、1隐藏"`
+	NoCache    uint8  `json:"no_cache" gorm:"index;not null;default:0;comment:是否缓存：0缓存、1不缓存"`
 	IsFrame    uint8  `json:"is_frame" gorm:"index;not null;default:0"`
 	common.ControlBy
 	common.ModelTime

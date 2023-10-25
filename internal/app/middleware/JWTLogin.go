@@ -9,7 +9,6 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strings"
 )
 
@@ -35,13 +34,13 @@ func JWTLogin() gin.HandlerFunc {
 				token := jwt.GetToken(c.Request, "")
 				// 验证token非空
 				if token == "" {
-					response.Error(c, http.StatusOK, err, constant.ErrorMsg[constant.ErrorNotLogin])
+					response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
 					return
 				}
 				// token验证是否失效
 				auth := token.Decode(base.JwtSignKey, false)
 				if auth == nil {
-					response.Error(c, http.StatusOK, err, constant.ErrorMsg[constant.ErrorNotLogin])
+					response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
 					return
 				}
 				// 设置到上下文

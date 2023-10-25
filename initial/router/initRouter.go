@@ -13,7 +13,7 @@ func init() {
 	handlersFuncMap = append(
 		handlersFuncMap,
 		middleware.JWTLogin(),
-		middleware.Policy(),
+		//middleware.Policy(),
 	)
 }
 

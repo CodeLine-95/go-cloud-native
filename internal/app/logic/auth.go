@@ -60,9 +60,8 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// 写入 Header
-	token.SetHeader(c.Writer)
-
 	xlog.Info(traceId.GetLogContext(c, "generate token", logz.F("token", token)))
-	response.OK(c, nil, constant.ErrorMsg[constant.Success])
+	response.OK(c, gin.H{
+		"token": token,
+	}, constant.ErrorMsg[constant.Success])
 }

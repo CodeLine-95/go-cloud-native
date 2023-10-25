@@ -35,7 +35,7 @@ func Policy() gin.HandlerFunc {
 		act := c.Request.Method
 		// 角色
 		var userRole models.CloudUserRole
-		err := db.D().Where("user_id = ?", auth.UID).Find(&userRole).Error
+		err := db.D().Where("uid = ?", auth.UID).Find(&userRole).Error
 		if err != nil {
 			response.Error(c, http.StatusOK, nil, constant.ErrorMsg[constant.ErrorNotLogin])
 			return

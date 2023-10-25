@@ -1,6 +1,9 @@
 package models
 
-import common "github.com/CodeLine-95/go-cloud-native/common/models"
+import (
+	common "github.com/CodeLine-95/go-cloud-native/common/models"
+	"gorm.io/gorm"
+)
 
 type CloudUser struct {
 	common.Model
@@ -16,4 +19,23 @@ type CloudUser struct {
 
 func (c CloudUser) TableName() string {
 	return "cloud_user"
+}
+
+type GetCloudUserAndRole struct {
+	CloudUser
+	RoleId uint32 `json:"role_id"`
+}
+
+// AfterFind 查询记录后会调用它
+func (cr *GetCloudUserAndRole) AfterFind(tx *gorm.DB) (err error) {
+	if cr == nil {
+		return
+	}
+	var cloudUserRole CloudUserRole
+	ret := tx.Where("uid = ?", cr.Id).Find(&cloudUserRole)
+	if ret.RowsAffected == 0 || ret.Error != nil {
+		return
+	}
+	cr.RoleId = cloudUserRole.RoleId
+	return
 }

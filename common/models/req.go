@@ -19,6 +19,10 @@ type RoleRequest struct {
 	Status     uint8  `json:"status,omitempty"`
 }
 
+type MenuRouterReqest struct {
+	IsTree uint8 `json:"is_tree,omitempty"`
+}
+
 type MenuRequest struct {
 	MenuId     uint32 `json:"menu_id,omitempty"`
 	MenuName   string `json:"menu_name,omitempty"`
@@ -34,6 +38,7 @@ type MenuRequest struct {
 	MenuSort   uint8  `json:"menu_sort,omitempty"`
 	Visible    uint8  `json:"visible,omitempty"`
 	IsFrame    uint8  `json:"is_frame,omitempty"`
+	NoCache    uint8  `json:"no_cache,omitempty"`
 }
 
 type UserRoleRequest struct {
