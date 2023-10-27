@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	common "github.com/CodeLine-95/go-cloud-native/common/models"
 	"gorm.io/gorm"
 )
@@ -38,4 +39,20 @@ func (cr *GetCloudUserAndRole) AfterFind(tx *gorm.DB) (err error) {
 	}
 	cr.RoleId = cloudUserRole.RoleId
 	return
+}
+
+func (c *CloudUser) ParseFields(p any) *CloudUser {
+	if p == nil {
+		return c
+	}
+	pjson, err := json.Marshal(p)
+	if err != nil {
+		return c
+	}
+
+	err = json.Unmarshal(pjson, c)
+	if err != nil {
+		return c
+	}
+	return c
 }

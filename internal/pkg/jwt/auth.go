@@ -13,9 +13,11 @@ const (
 )
 
 type Auth struct {
-	Foo  string `json:"foo"`
-	UID  int64  `json:"uid"`
-	Type string `json:"type"`
+	Foo     string `json:"foo"`
+	UID     int64  `json:"uid"`
+	Type    string `json:"type"`
+	RoleID  int64  `json:"role_id"`
+	IsAdmin int64  `json:"is_admin"`
 	jwt.RegisteredClaims
 }
 

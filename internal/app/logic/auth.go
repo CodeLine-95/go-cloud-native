@@ -26,23 +26,25 @@ func Login(c *gin.Context) {
 	}
 
 	engine := db.D()
-	var user models.CloudUser
-	err = engine.Where("user_name = ?", params.UserName).Find(&user).Error
+	var userResp models.GetCloudUserAndRole
+	err = engine.Where("user_name = ?", params.UserName).Find(&userResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
 
-	ok, err := base.CompareHashAndPassword(user.PassWord, params.PassWord)
+	ok, err := base.CompareHashAndPassword(userResp.PassWord, params.PassWord)
 	if !ok || err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
 	}
 
 	auth := jwt.Auth{
-		Type: jwt.TypeJWT,
-		UID:  int64(user.Id),
-		Foo:  utils.RandStringRunes(10),
+		Type:    jwt.TypeJWT,
+		UID:     int64(userResp.Id),
+		Foo:     utils.RandStringRunes(10),
+		RoleID:  int64(userResp.RoleId),
+		IsAdmin: int64(userResp.Admin),
 	}
 
 	token, err := auth.Encode(base.JwtSignKey)
@@ -52,6 +54,8 @@ func Login(c *gin.Context) {
 	}
 
 	// 更新用户登录信息
+	var user models.CloudUser
+	user.ParseFields(userResp)
 	user.LoginIp = ip.ClientIP(c)
 	user.LastTime = uint32(time.Now().Unix())
 	err = engine.Save(user).Error

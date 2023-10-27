@@ -25,6 +25,7 @@ func roleRouter(r *gin.RouterGroup) {
 	c.POST("/add", logic.RoleAdd)
 	c.POST("/edit", logic.RoleEdit)
 	c.POST("/del", logic.RoleDel)
+	c.POST("/menu", logic.GetRoleMenu)
 }
 
 // 菜单
@@ -34,7 +35,6 @@ func menuRouter(r *gin.RouterGroup) {
 	c.POST("/add", logic.MenuAdd)
 	c.POST("/edit", logic.MenuEdit)
 	c.POST("/del", logic.MenuDel)
-	c.POST("/role-list", logic.GetRoleMenu)
 }
 
 // 分配

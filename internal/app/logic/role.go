@@ -9,6 +9,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/tools/structs"
 	"github.com/gin-gonic/gin"
+	"strings"
 	"time"
 )
 
@@ -19,8 +20,7 @@ func RoleResp(c *gin.Context) {
 		return
 	}
 
-	var role models.CloudRole
-	selectFields := structs.ToTags(role, "json")
+	selectFields := structs.ToTags(models.CloudRole{}, "json")
 
 	var roleResp []*models.CloudRole
 	err := db.D().Select(selectFields).
@@ -121,4 +121,45 @@ func RoleDel(c *gin.Context) {
 	}
 
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
+}
+
+func GetRoleMenu(c *gin.Context) {
+
+	auth, err := base.GetAuth(c)
+	if err != nil {
+		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
+		return
+	}
+
+	var roleMenu []*models.CloudRoleMenu
+	err = db.D().Where("role_id = ?", auth.RoleID).Find(&roleMenu).Error
+	if err = db.D().Where("role_id = ?", auth.RoleID).Find(&roleMenu).Error; err != nil {
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+
+	menuIds := []string{}
+	for _, val := range roleMenu {
+		menuIds = append(menuIds, string(val.RoleId))
+	}
+
+	selectFields := structs.ToTags(models.CloudMenu{}, "json")
+
+	var menuResp models.CloudMenuTree
+	dbx := db.D().Select(selectFields)
+	if auth.IsAdmin == 0 {
+		if len(menuIds) <= 0 {
+			response.OK(c, nil, constant.ErrorMsg[constant.Success])
+			return
+		}
+		dbx = dbx.Where("menu_id in (?)", strings.Join(menuIds, ","))
+	}
+
+	err = dbx.Find(&menuResp).Error
+	if err != nil {
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+
+	response.OK(c, menuResp, constant.ErrorMsg[constant.Success])
 }
