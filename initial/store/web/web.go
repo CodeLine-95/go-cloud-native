@@ -11,13 +11,14 @@ func Init() {
 	// 终端输出彩色日志
 	gin.DisableConsoleColor()
 
+	//初始化 gin
+	r := gin.New()
+
 	// 测试环境打开 debug
 	if viper.GetString("app.env") == "test" || viper.GetString("app.env") == "dev" {
 		gin.SetMode(gin.DebugMode)
+		r.Use(gin.Logger())
 	}
-
-	//初始化 gin
-	r := gin.New()
 
 	// Debug 日志输出格式
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
