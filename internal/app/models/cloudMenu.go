@@ -16,7 +16,7 @@ type CloudMenu struct {
 	MenuMethod string `json:"menu_method" gorm:"size:16;not null;default:'';comment:菜单请求类型"`
 	Permission string `json:"permission" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单权限标识"`
 	ParentId   uint32 `json:"parent_id" gorm:"index;not null;default:0;comment:父级ID"`
-	Component  string `json:"component" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单组件"`
+	Component  string `json:"component" gorm:"index;size:255;not null;default:'';comment:菜单组件"`
 	MenuSort   uint8  `json:"menu_sort" gorm:"index;not null;default:0;comment:菜单排序"`
 	Visible    uint8  `json:"visible" gorm:"index;not null;default:0;comment:菜单是否显示：0显示、1隐藏"`
 	NoCache    uint8  `json:"no_cache" gorm:"index;not null;default:0;comment:是否缓存：0缓存、1不缓存"`
@@ -49,6 +49,11 @@ func (c *CloudMenu) ParseFields(p any) *CloudMenu {
 }
 
 type CloudMenuTree []*CloudMenu
+
+type MenuPermsResp struct {
+	Menus CloudMenuTree `json:"menus"`
+	Perms []string      `json:"perms"`
+}
 
 // TreeNode 格式化树节点
 func (c CloudMenuTree) TreeNode() CloudMenuTree {

@@ -161,5 +161,17 @@ func GetRoleMenu(c *gin.Context) {
 		return
 	}
 
-	response.OK(c, menuResp, constant.ErrorMsg[constant.Success])
+	var perms []string
+	if len(menuResp) > 0 {
+		for _, val := range menuResp {
+			perms = append(perms, val.Permission)
+		}
+	}
+
+	menuPermsResp := models.MenuPermsResp{
+		Menus: menuResp,
+		Perms: perms,
+	}
+
+	response.OK(c, menuPermsResp, constant.ErrorMsg[constant.Success])
 }
