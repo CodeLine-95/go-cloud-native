@@ -20,8 +20,11 @@
 # Go workspace file
 go.work
 
-# .idea
-.idea
-
 # .git
 .git
+
+# .idea
+.idea
+*.DS_Store
+*logs
+assets
