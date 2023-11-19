@@ -11,6 +11,7 @@ func Validate(r *gin.RouterGroup) {
 	roleRouter(r)
 	menuRouter(r)
 	allocationRouter(r)
+	dockerRouter(r)
 }
 
 func userRouter(r *gin.RouterGroup) {
@@ -44,12 +45,11 @@ func allocationRouter(r *gin.RouterGroup) {
 	c.POST("/role-menu", logic.RoleMenu)
 }
 
-//func DockerRouter(r *gin.RouterGroup) {
-//	dockerApi := logic.DockerApi{}
-//	docker := r.Group("/docker")
-//	docker.GET("/container-list", dockerApi.GetContainerList)
-//	docker.POST("/container-logs", dockerApi.ContainerLogs)
-//
-//	docker.GET("/images-list", dockerApi.GetImageList)
-//	docker.POST("/images-pull", dockerApi.ImagePull)
-//}
+func dockerRouter(r *gin.RouterGroup) {
+	docker := r.Group("/docker")
+	docker.GET("/list", logic.ContainerList)
+	docker.POST("/logs", logic.ContainerLogs)
+	docker.POST("/stop", logic.ContainerStop)
+	docker.POST("/batch-stop", logic.BatchContainerStop)
+	docker.POST("/create", logic.ContainerCreate)
+}

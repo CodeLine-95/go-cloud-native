@@ -30,33 +30,36 @@ const (
 	ErrorDBRecordExist = 200101
 	// ErrorUploadImage 文件上传错误
 	ErrorUploadImage = 200201
+
+	// ErrorCreateContainer 创建容器错误
+	ErrorCreateContainer = 300101
+	// ErrorContainerList 获取容器列表错误
+	ErrorContainerList = 300102
+	// ErrorContainerLogs 获取容器日志错误
+	ErrorContainerLogs = 300103
+	// ErrorContainerStop 停止容器错误
+	ErrorContainerStop = 300104
 )
 
 var ErrorMsg = map[int]string{
-	Success:            "success",
-	Fail:               "fail",
-	ErrorHaveNoAccess:  "have no access",
-	ErrorParams:        "request params err",
-	ErrorUnmarshalJSON: "unmarshal json failed",
-	ErrorMarshalJSON:   "marshal json failed",
-	ErrorDB:            "db failed",
-	ErrorNotLogin:      "need login",
-	ErrorUploadImage:   "upload image failed",
-	ErrorJWT:           "generate token failed",
-	ErrorDBRecordExist: "db record is exist",
+	Success:              "success",
+	Fail:                 "fail",
+	ErrorHaveNoAccess:    "have no access",
+	ErrorParams:          "request params err",
+	ErrorUnmarshalJSON:   "unmarshal json failed",
+	ErrorMarshalJSON:     "marshal json failed",
+	ErrorDB:              "db failed",
+	ErrorNotLogin:        "need login",
+	ErrorUploadImage:     "upload image failed",
+	ErrorJWT:             "generate token failed",
+	ErrorDBRecordExist:   "db record is exist",
+	ErrorCreateContainer: "create container failed",
+	ErrorContainerList:   "get container list failed",
+	ErrorContainerLogs:   "get container ID %s logs failed",
+	ErrorContainerStop:   "stop container ID %s failed",
 }
 
 type Error struct {
 	ErrCode int    `json:"errCode"`
 	ErrMsg  string `json:"errMsg"`
 }
-
-var (
-	// ErrorSuccess 接口正确返回，即可使用该错误码
-	ErrorSuccess = &Error{ErrCode: Success, ErrMsg: ErrorMsg[Success]}
-	ErrorParam   = &Error{ErrCode: ErrorParams, ErrMsg: ErrorMsg[ErrorParams]}
-
-	ErrorUnmarshalJson = &Error{ErrCode: ErrorUnmarshalJSON, ErrMsg: ErrorMsg[ErrorUnmarshalJSON]}
-	ErrorMarshalJson   = &Error{ErrCode: ErrorMarshalJSON, ErrMsg: ErrorMsg[ErrorMarshalJSON]}
-	ErrorUpload        = &Error{ErrCode: ErrorUploadImage, ErrMsg: ErrorMsg[ErrorUploadImage]}
-)

@@ -1,13 +1,13 @@
 package docker
 
 import (
+	"bytes"
 	"errors"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
 	specs "github.com/opencontainers/image-spec/specs-go/v1"
 	"io"
-	"os"
 )
 
 /*
@@ -152,12 +152,9 @@ func (d *DockerClient) ContainerStop(ID string) error {
 }
 
 // ContainerLogs 获取指定容器日志
-func (d *DockerClient) ContainerLogs(ID string) {
+func (d *DockerClient) ContainerLogs(ID string) (string, error) {
 	options := types.ContainerLogsOptions{ShowStdout: true}
 	out, err := d.Client.ContainerLogs(d.Ctx, ID, options)
-	if err != nil {
-		return
-	}
 	defer func(out io.ReadCloser) {
 		err := out.Close()
 		if err != nil {
@@ -165,11 +162,9 @@ func (d *DockerClient) ContainerLogs(ID string) {
 		}
 	}(out)
 
-	io.Copy(os.Stdout, out)
-
-	//buf := new(bytes.Buffer)
-	//buf.ReadFrom(out)
-	//return buf.String(), err
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(out)
+	return buf.String(), err
 }
 
 // ContainerCreate 创建容器
