@@ -6,10 +6,10 @@ import (
 	"testing"
 )
 
-func TestRun(t *testing.T) {
-	docker := containers.Docker{}
+func TestDocker(t *testing.T) {
+	dockerClient := containers.NewDockerClient()
 
-	containerList, err := docker.ContainerList()
+	containerList, err := dockerClient.ContainerList()
 	if err != nil {
 		panic(err)
 	}

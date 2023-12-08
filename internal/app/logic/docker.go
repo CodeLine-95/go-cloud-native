@@ -14,7 +14,7 @@ import (
 var dockerClient *docker.DockerClient
 
 func init() {
-	dockerClient = containers.InitDockerClient()
+	dockerClient = containers.NewDockerClient()
 }
 
 func ContainerList(c *gin.Context) {

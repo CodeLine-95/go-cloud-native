@@ -6,8 +6,8 @@ import (
 	"github.com/docker/docker/client"
 )
 
-// 创建docker client 句柄
-func InitDockerClient() *docker.DockerClient {
+// NewDockerClient 创建 docker client 句柄
+func NewDockerClient() *docker.DockerClient {
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		panic(err)

@@ -62,19 +62,19 @@ type ContainerStopRequest struct {
 	Ids string `json:"ids"`
 }
 type ContainerCreateRequest struct {
-	Image      string   `json:"image"`      // 指定要使用的镜像
-	Cmd        []string `json:"cmd"`        // 指定容器启动时要执行的命令
-	Hostname   string   `json:"hostname"`   // 主机名
-	HostIP     string   `json:"hostIP"`     // 容器绑定IP
-	LocalProt  string   `json:"localProt"`  // 容器绑定端口
-	HostPort   string   `json:"hostPort"`   // 宿主机映射端口
-	PolicyName string   `json:"policyName"` // 重启策略
+	Image         string   `json:"image"`         // 指定要使用的镜像
+	Cmd           []string `json:"cmd"`           // 指定容器启动时要执行的命令
+	Hostname      string   `json:"hostname"`      // 主机名
+	HostIP        string   `json:"hostIP"`        // 容器绑定IP
+	LocalProt     string   `json:"localProt"`     // 容器绑定端口
+	HostPort      string   `json:"hostPort"`      // 宿主机映射端口
+	PolicyName    string   `json:"policyName"`    // 重启策略
+	ContainerName string   `json:"containerName"` // 容器名称
 	// 可选的重启策略：
 	// - "no"：无重启策略
 	// - "always"：容器总是自动重启
 	// - "on-failure"：容器在非零退出状态时重启（默认最多重启3次）
 	// - "unless-stopped"：除非手动停止，否则容器总是自动重启
-	ContainerName string `json:"containerName"` // 容器名称
 }
 
 type ImagesPullRequest struct {
