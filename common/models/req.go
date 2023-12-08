@@ -80,3 +80,12 @@ type ContainerCreateRequest struct {
 type ImagesPullRequest struct {
 	Refstr string `json:"refstr"`
 }
+
+type EtcdRequest struct {
+	Name        string `json:"name"`
+	Remark      string `json:"remark,omitempty"`
+	Content     string `json:"content"`
+	IsSubscribe int32  `json:"is_subscribe"`
+	SubscribeID string `json:"subscribe_id,omitempty"`
+	IsDelete    int32  `json:"is_delete"`
+}

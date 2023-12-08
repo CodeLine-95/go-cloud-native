@@ -12,6 +12,7 @@ func Validate(r *gin.RouterGroup) {
 	menuRouter(r)
 	allocationRouter(r)
 	dockerRouter(r)
+	etcdRouter(r)
 }
 
 func userRouter(r *gin.RouterGroup) {
@@ -52,4 +53,9 @@ func dockerRouter(r *gin.RouterGroup) {
 	docker.POST("/stop", logic.ContainerStop)
 	docker.POST("/batch-stop", logic.BatchContainerStop)
 	docker.POST("/create", logic.ContainerCreate)
+}
+
+func etcdRouter(r *gin.RouterGroup) {
+	etcd := r.Group("/etcd")
+	etcd.POST("/create", logic.CreatePut)
 }

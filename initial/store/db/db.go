@@ -117,19 +117,19 @@ func Init() {
 					models.CloudRoleMenu{},
 					models.CloudMenu{},
 					models.CloudUserRole{},
+					models.CloudEtcd{},
 				)
-				err := engine.AutoMigrate(syncMap...)
-				if err != nil {
-					logz.Error("engine sync fail",
-						logz.F("table", []string{
-							new(models.CloudUser).TableName(),
-							new(models.CloudRole).TableName(),
-							new(models.CloudRoleMenu).TableName(),
-							new(models.CloudMenu).TableName(),
-							new(models.CloudUserRole).TableName(),
-						}), logz.F("err", err),
-					)
-				}
+				engine.AutoMigrate(syncMap...)
+				logz.Info("auto migrate",
+					logz.F("table", []string{
+						new(models.CloudUser).TableName(),
+						new(models.CloudRole).TableName(),
+						new(models.CloudRoleMenu).TableName(),
+						new(models.CloudMenu).TableName(),
+						new(models.CloudUserRole).TableName(),
+						new(models.CloudEtcd).TableName(),
+					}),
+				)
 			}
 
 			groups[instanceRwType] = engine

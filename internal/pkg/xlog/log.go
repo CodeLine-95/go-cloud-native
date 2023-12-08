@@ -4,6 +4,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"go.uber.org/zap/zapcore"
 	"strings"
+	"time"
 )
 
 const (
@@ -46,7 +47,7 @@ func InitLog(dir string, level string, serviceName string) {
 	if !ok {
 		l = zapcore.InfoLevel
 	}
-	logFile := dir + "/" + serviceName
+	logFile := dir + "/" + serviceName + "/" + time.Now().Format(time.DateOnly)
 	defaultLogger := logz.New(logz.Writer(logz.NewFileWriter(logFile+".log")), logz.Level(l))
 	logz.SetDefaultLogger(defaultLogger)
 	errLogger := logz.New(logz.Writer(logz.NewFileWriter(logFile+".wf")), logz.Level(levelMap[WarnLevel]))
