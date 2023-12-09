@@ -46,6 +46,7 @@ func allocationRouter(r *gin.RouterGroup) {
 	c.POST("/role-menu", logic.RoleMenu)
 }
 
+// docker
 func dockerRouter(r *gin.RouterGroup) {
 	docker := r.Group("/docker")
 	docker.GET("/list", logic.ContainerList)
@@ -55,7 +56,10 @@ func dockerRouter(r *gin.RouterGroup) {
 	docker.POST("/create", logic.ContainerCreate)
 }
 
+// etcd
 func etcdRouter(r *gin.RouterGroup) {
 	etcd := r.Group("/etcd")
 	etcd.POST("/create", logic.CreatePut)
+	etcd.GET("/list", logic.GetService)
+	etcd.DELETE("/del", logic.DelService)
 }

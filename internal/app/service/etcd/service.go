@@ -14,6 +14,14 @@ func (e *EtcdClient) PutService(key, val string) error {
 	return err
 }
 
+// DelService 删除服务
+func (e *EtcdClient) DelService(key string) error {
+	ctx, cancel := context.WithTimeout(e.Cli.Ctx(), 2*time.Second)
+	_, err := e.KVCli.Delete(ctx, key)
+	cancel()
+	return err
+}
+
 // GetService 服务发现
 func (e *EtcdClient) GetService(key string) ([]*mvccpb.KeyValue, error) {
 	ctx, cancel := context.WithTimeout(e.Cli.Ctx(), time.Second)
