@@ -62,4 +62,5 @@ func etcdRouter(r *gin.RouterGroup) {
 	etcd.POST("/create", logic.CreatePut)
 	etcd.GET("/list", logic.GetService)
 	etcd.DELETE("/del", logic.DelService)
+	etcd.POST("/put", logic.PutService)
 }

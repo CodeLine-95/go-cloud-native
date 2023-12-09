@@ -98,7 +98,7 @@ func DelService(c *gin.Context) {
 	}
 	var cloudEtcd models.CloudEtcd
 	cloudEtcd.ParseFields(params)
-	err := db.D().Delete(cloudEtcd).Error
+	err := db.D().Save(cloudEtcd).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
@@ -107,6 +107,33 @@ func DelService(c *gin.Context) {
 	err = etcdClient.DelService(params.Name)
 	if err != nil {
 		xlog.Error(traceId.GetLogContext(c, "etcd del service fail, err: ", logz.F("err", err)))
+	}
+	response.OK(c, nil, constant.ErrorMsg[constant.Success])
+}
+
+// 手动注册 / 撤销重新注册
+func PutService(c *gin.Context) {
+	var params common.EtcdRequest
+	if err := c.ShouldBindJSON(&params); err != nil {
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
+	}
+	var cloudEtcd models.CloudEtcd
+	cloudEtcd.ParseFields(params)
+	cloudEtcd.IsRegister = 1
+	// etcd 注册
+	err := etcdClient.PutService(params.Name, params.Content)
+	if err != nil {
+		xlog.Error(traceId.GetLogContext(c, "etcd put service fail, err: ", logz.F("err", err)))
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
+	}
+	cloudEtcd.IsRegister = 1
+	// 更新
+	res := db.D().Save(cloudEtcd)
+	if res.RowsAffected == 0 || res.Error != nil {
+		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
+		return
 	}
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
 }
