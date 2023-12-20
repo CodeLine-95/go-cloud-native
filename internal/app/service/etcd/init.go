@@ -42,7 +42,7 @@ func NewClient() EtcdClient {
 		panic(err)
 	}
 
-	fmt.Println("connect to etcd success.")
+	fmt.Printf("[etcd] connect %#v to success... \r\n", etcdLocalMap)
 
 	return EtcdClient{
 		Cli:      cli,

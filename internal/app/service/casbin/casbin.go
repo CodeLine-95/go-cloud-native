@@ -10,8 +10,7 @@ import (
 )
 
 const (
-	DIR_PATH      = "tools/casbin"
-	CONF_PATH     = "conf"
+	CONF_PATH     = "configs/casbin"
 	RBAC_DEFAULT  = "rbac_default"
 	RBAC_DOMAINS  = "rbac_domains"
 	RBAC_RESOURCE = "rbac_resource_roles"
@@ -37,9 +36,6 @@ var (
 func (c *CasbinService) Init() {
 	pwd, _ := os.Getwd()
 	// 切换到指定目录下
-	_ = os.Chdir(pwd + "/" + DIR_PATH)
-	// 重新获取当前目录
-	pwd, _ = os.Getwd()
 	path := pwd + "/" + CONF_PATH
 	//获取文件或目录相关信息
 	fileInfoList, err := os.ReadDir(filepath.Clean(filepath.ToSlash(path)))

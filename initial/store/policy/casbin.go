@@ -2,7 +2,7 @@ package policy
 
 import (
 	"github.com/CodeLine-95/go-cloud-native/initial/store/db"
-	policy "github.com/CodeLine-95/go-cloud-native/tools/casbin"
+	policy "github.com/CodeLine-95/go-cloud-native/internal/app/service/casbin"
 )
 
 var e *policy.CasbinService

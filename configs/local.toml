@@ -10,8 +10,8 @@
     dir = "logs/applogs"      # 日志目录
 
 [db]  # 数据库相关配置
-    [db.cloud_native]    # mysql 组（这里可以扩展其他组）
-        host = "127.0.0.1"     # mysql server 地址
+    [db.cloud_native]          # mysql 组（这里可以扩展其他组）
+        host = "47.88.105.38"  # mysql server 地址
         port = 13306           # mysql 链接端口
         user = "cloud_native"  # mysql 登录用户名
         pass = "ZOYk&#195t9OWZo~5+" # mysql 登录密码
