@@ -40,10 +40,10 @@ function images() {
   docker run -d --name ${pre_name}-${new_container_name} -p 8000:8000 --privileged=true ${pre_name}:${new_tag}
 }
 
+# 生成指定长度的随机字符串
 function GetRandNum(){
   src_string=$(echo date +%s%N | md5sum |cut -c 1-9)
   length=$1
-  #注意这里一定要设置成局部的，否则会与后面的冲突
   echo /dev/urandom | head -n 10 | md5sum | head -c ${length}
 }
 
