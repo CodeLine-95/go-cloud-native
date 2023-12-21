@@ -24,7 +24,8 @@ function images() {
     fi
     echo ${new_tag}
     # 打包成镜像，并设置镜像名称
-    docker build . -t ${pre_name}:${new_tag}
+    # --no-cache 不使用 docker 缓存，用于解决同一个 Dockerfile 构建不同版本的镜像导致镜像ID一样的问题
+    docker build --no-cache . -t ${pre_name}:${new_tag}
     if [[ "$result" != "" ]]; then
       if [ -n "$old_tag" ]; then
         # 删除上一个运行的容器
