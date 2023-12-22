@@ -13,7 +13,7 @@ type EtcdClient struct {
 	LeaseID  clientv3.LeaseID // 租约ID
 }
 
-var etcdLocalMap = []string{"127.0.0.1:2379"}
+var etcdLocalMap = []string{"127.0.0.1:20079"}
 
 var dialTimeout = 5 * time.Second
 
