@@ -1,29 +1,11 @@
-package jwt
+package jwtToken
 
 import (
 	"encoding/json"
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
-	"strconv"
 	"time"
 )
-
-const (
-	TypeJWT = "jwt"
-)
-
-type Auth struct {
-	Foo     string `json:"foo"`
-	UID     int64  `json:"uid"`
-	Type    string `json:"type"`
-	RoleID  int64  `json:"role_id"`
-	IsAdmin int64  `json:"is_admin"`
-	jwt.RegisteredClaims
-}
-
-type ValidFunc func(c *Auth) error
-
-var validFuncs = make(map[string]ValidFunc)
 
 func init() {
 	RegisterValidFunc(TypeJWT, defaultJWTValidFunc)
@@ -49,7 +31,7 @@ func (a *Auth) Valid() error {
 	if a.ExpiresAt.Unix() < time.Now().Unix() {
 		return errors.New("auth is expired")
 	}
-	if valid, ok := validFuncs[a.Type]; ok {
+	if valid, ok := validFuncs[a.Subject]; ok {
 		return valid(a)
 	}
 	return errors.New("unknown auth type")
@@ -60,16 +42,7 @@ func (a *Auth) Encode(sign string) (Token, error) {
 	if a.ExpiresAt == nil || a.ExpiresAt.Unix() <= 0 {
 		a.ExpiresAt = jwt.NewNumericDate(time.Unix(time.Now().Unix()+DefaultDuration, 0))
 	}
-	if a.IssuedAt == nil || a.IssuedAt.Unix() <= 0 {
-		a.IssuedAt = jwt.NewNumericDate(time.Unix(time.Now().Unix(), 0))
-	}
-	if a.NotBefore == nil || a.NotBefore.Unix() <= 0 {
-		a.NotBefore = jwt.NewNumericDate(time.Unix(time.Now().Unix(), 0))
-	}
-	a.ID = strconv.FormatInt(a.UID, 10)
-	a.Subject = a.Type
-	a.Issuer = a.Type
-	a.Audience = []string{sign}
+	a.Subject = TypeJWT
 	// 验证 Auth
 	if err := a.Valid(); err != nil {
 		return "", err

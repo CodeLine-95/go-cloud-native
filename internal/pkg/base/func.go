@@ -2,7 +2,7 @@ package base
 
 import (
 	"encoding/json"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwtToken"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -33,7 +33,7 @@ func GenerateMsgIDFromContext(c *gin.Context) string {
 }
 
 // GetAuth 解析上下文
-func GetAuth(c *gin.Context) (auth *jwt.Auth, err error) {
+func GetAuth(c *gin.Context) (auth *jwtToken.Auth, err error) {
 	authAny, _ := c.Get("auth")
 	authJson, err := json.Marshal(authAny)
 	if err != nil {

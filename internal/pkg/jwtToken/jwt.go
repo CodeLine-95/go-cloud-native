@@ -1,17 +1,12 @@
-package jwt
+package jwtToken
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 )
-
-const (
-	DefaultDuration = int64(2 * 3600)
-)
-
-type Token string
 
 // GetToken 从请求中获取jwt Token
 func GetToken(r *http.Request, cookieName string) Token {
@@ -27,24 +22,29 @@ func GetToken(r *http.Request, cookieName string) Token {
 
 // Decode 将Token解码成Auth结构体， verify为true表示进行，校验失败则返回nil
 func (t Token) Decode(sign string, verify bool) *Auth {
+	jwtClaims := &AuthExtend{}
 	claims := &Auth{}
 	parser := &jwt.Parser{}
 	if verify {
 		parser = jwt.NewParser(jwt.WithoutClaimsValidation())
 	}
-	token, err := parser.ParseWithClaims(string(t), claims, func(token *jwt.Token) (interface{}, error) {
+	token, err := parser.ParseWithClaims(string(t), jwtClaims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("not authorization")
 		}
 		return []byte(sign), nil
 	})
 	if err != nil {
-		logz.Error("jwt token decode", logz.F("error", err.Error()))
+		logz.Error("jwtToken token decode", logz.F("error", err.Error()))
 		return nil
 	}
 	if token == nil || !token.Valid {
 		return nil
 	}
+
+	jsonClaims, _ := json.Marshal(jwtClaims)
+	_ = json.Unmarshal(jsonClaims, claims)
+
 	return claims
 }
 
@@ -58,7 +58,7 @@ func (t Token) SetHeader(w http.ResponseWriter) {
 	w.Header().Set("X-Auth", string(t))
 }
 
-// String jwt Token转成字符串
+// String jwtToken Token转成字符串
 func (t Token) String() string {
 	return string(t)
 }

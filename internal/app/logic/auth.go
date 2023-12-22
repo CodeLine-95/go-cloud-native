@@ -6,7 +6,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwtToken"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/utils/ip"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
@@ -14,6 +14,8 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/tools/traceId"
 	"github.com/CodeLine-95/go-cloud-native/tools/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/spf13/viper"
 	"time"
 )
 
@@ -38,13 +40,15 @@ func Login(c *gin.Context) {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
 	}
-
-	auth := jwt.Auth{
-		Type:    jwt.TypeJWT,
-		UID:     int64(userResp.Id),
-		Foo:     utils.RandStringRunes(10),
-		RoleID:  int64(userResp.RoleId),
-		IsAdmin: int64(userResp.Admin),
+	jwtExpTime := viper.GetInt("jwt.expireTime")
+	auth := jwtToken.Auth{
+		utils.RandStringRunes(10),
+		int64(userResp.Id),
+		int64(userResp.RoleId),
+		int64(userResp.Admin),
+		jwtToken.AuthExtend{
+			ExpiresAt: jwt.NewNumericDate(time.Unix(time.Now().Unix()+int64(jwtExpTime), 0)),
+		},
 	}
 
 	token, err := auth.Encode(base.JwtSignKey)

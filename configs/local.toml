@@ -4,6 +4,9 @@
     debug = "true" # 是否开启Debug
     apiVersion = "v1"  # 接口版本
 
+[jwt]
+    expireTime = 86400
+
 [log]
     name = "go-cloud-native"  # 日志文件名
     level = "debug"           # 日志等级

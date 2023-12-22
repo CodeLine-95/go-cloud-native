@@ -6,7 +6,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwtToken"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -16,7 +16,7 @@ func Policy() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 角色
 		// 获取 token
-		token := jwt.GetToken(c.Request, "")
+		token := jwtToken.GetToken(c.Request, "")
 		// 验证token非空
 		if token == "" {
 			response.Error(c, http.StatusOK, nil, constant.ErrorMsg[constant.ErrorNotLogin])

@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/CodeLine-95/go-cloud-native/internal/app/constant"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/base"
-	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwt"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwtToken"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
@@ -31,7 +31,7 @@ func JWTLogin() gin.HandlerFunc {
 				return
 			} else {
 				// 获取 token
-				token := jwt.GetToken(c.Request, "")
+				token := jwtToken.GetToken(c.Request, "")
 				// 验证token非空
 				if token == "" {
 					response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
