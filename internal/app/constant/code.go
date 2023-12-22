@@ -9,6 +9,7 @@ const (
 	ErrorDB            = 5
 	ErrorNotLogin      = 6
 	ErrorJWT           = 7
+	ErrorEtcd          = 8
 
 	// ErrorParams 参数错误
 	ErrorParams = 400
@@ -57,6 +58,7 @@ var ErrorMsg = map[int]string{
 	ErrorContainerList:   "get container list failed",
 	ErrorContainerLogs:   "get container ID %s logs failed",
 	ErrorContainerStop:   "stop container ID %s failed",
+	ErrorEtcd:            "etcd service failed",
 }
 
 type Error struct {

@@ -46,17 +46,18 @@ func CreatePut(c *gin.Context) {
 		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
 		return
 	}
-	cloudEtcd.ParseFields(params)
-	cloudEtcd.SetCreateBy(uint32(auth.UID))
-	cloudEtcd.CreateTime = uint32(time.Now().Unix())
-	cloudEtcd.IsRegister = 1
 	// etcd 注册
 	err = etcdClient.PutService(params.Name, params.Content)
 	if err != nil {
 		xlog.Error(traceId.GetLogContext(c, "etcd put service fail, err: ", logz.F("err", err)))
-		cloudEtcd.IsRegister = 0
+		response.Error(c, constant.ErrorEtcd, err, constant.ErrorMsg[constant.ErrorEtcd])
+		return
 	}
 	// 入库
+	cloudEtcd.ParseFields(params)
+	cloudEtcd.SetCreateBy(uint32(auth.UID))
+	cloudEtcd.CreateTime = uint32(time.Now().Unix())
+	cloudEtcd.IsRegister = 1
 	res := db.D().Create(&cloudEtcd)
 	if res.RowsAffected == 0 || res.Error != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
