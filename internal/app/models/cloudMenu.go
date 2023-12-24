@@ -11,9 +11,7 @@ type CloudMenu struct {
 	MenuTitle  string `json:"menu_title" gorm:"size:128;not null;default:'';comment:菜单标题"`
 	MenuIcon   string `json:"menu_icon" gorm:"size:128;not null;default:'';comment:菜单图标"`
 	MenuPath   string `json:"menu_path" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单路径"`
-	PathGroup  string `json:"path_group" gorm:"size:255;not null;default:'';comment:菜单路径组"`
 	MenuType   string `json:"menu_type" gorm:"size:255;not null;default:'';comment:菜单类型：D目录、M模块、C按钮"`
-	MenuMethod string `json:"menu_method" gorm:"size:16;not null;default:'';comment:菜单请求类型"`
 	Permission string `json:"permission" gorm:"size:255;not null;uniqueIndex;default:'';comment:菜单权限标识"`
 	ParentId   uint32 `json:"parent_id" gorm:"index;not null;default:0;comment:父级ID"`
 	Component  string `json:"component" gorm:"index;size:255;not null;default:'';comment:菜单组件"`
