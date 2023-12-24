@@ -124,7 +124,6 @@ func RoleDel(c *gin.Context) {
 }
 
 func GetRoleMenu(c *gin.Context) {
-
 	auth, err := base.GetAuth(c)
 	if err != nil {
 		response.Error(c, constant.ErrorNotLogin, err, constant.ErrorMsg[constant.ErrorNotLogin])
@@ -147,31 +146,45 @@ func GetRoleMenu(c *gin.Context) {
 
 	var menuResp models.CloudMenuTree
 	dbx := db.D().Select(selectFields)
+	permsDb := db.D().Select(selectFields)
 	if auth.IsAdmin == 0 {
 		if len(menuIds) <= 0 {
 			response.OK(c, nil, constant.ErrorMsg[constant.Success])
 			return
 		}
 		dbx = dbx.Where("menu_id in (?)", strings.Join(menuIds, ","))
+		permsDb = permsDb.Where("menu_id in (?)", strings.Join(menuIds, ","))
 	}
 
-	err = dbx.Find(&menuResp).Error
+	err = dbx.Where("menu_type in(?,?)", "D", "M").Find(&menuResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
 
 	var perms []string
-	if len(menuResp) > 0 {
-		for _, val := range menuResp {
-			perms = append(perms, val.Permission)
+	var menuPermsResp models.CloudMenuTree
+	permsErr := permsDb.Where("menu_type = ?", "C").Find(&menuPermsResp).Error
+	if permsErr != nil {
+		response.Error(c, constant.ErrorDB, permsErr, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+	if len(menuPermsResp) > 0 {
+		for _, val := range menuPermsResp {
+			if val.Permission != "" {
+				perms = append(perms, val.Permission)
+			}
 		}
 	}
 
-	menuPermsResp := models.MenuPermsResp{
-		Menus: menuResp,
+	// 生成权限二叉树
+	userMenuResp := models.UserMenuTree{}
+	userMenuResp = menuResp.UserTreeNode()
+
+	respData := models.MenuPermsResp{
+		Menus: userMenuResp,
 		Perms: perms,
 	}
 
-	response.OK(c, menuPermsResp, constant.ErrorMsg[constant.Success])
+	response.OK(c, respData, constant.ErrorMsg[constant.Success])
 }

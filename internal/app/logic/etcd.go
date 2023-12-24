@@ -32,7 +32,7 @@ func CreatePut(c *gin.Context) {
 	var cloudEtcd models.CloudEtcd
 	// 验证roleKey标识，唯一
 	var count int64
-	err := db.D().Model(cloudEtcd).Where("name = ?", params.Name).Count(&count).Error
+	err := db.D().Model(cloudEtcd).Where("name = ? and is_delete = ?", params.Name, 0).Count(&count).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
@@ -82,7 +82,7 @@ func GetService(c *gin.Context) {
 		cloudEtcdResp,
 		pageList,
 		db.D().Select(selectFields).Where("position(? in `name`)", params.SearchKey),
-	)).Find(&cloudEtcdResp).Error
+	)).Where("is_delete = ?", 0).Find(&cloudEtcdResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return

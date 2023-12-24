@@ -10,5 +10,5 @@ func Common(r *gin.RouterGroup) {
 	c.POST("/upload", logic.Upload)
 
 	a := r.Group("/auth")
-	a.POST("/login", logic.Login)
+	a.POST("/token", logic.Login)
 }

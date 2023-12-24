@@ -37,7 +37,7 @@ func Login(c *gin.Context) {
 
 	ok, err := base.CompareHashAndPassword(userResp.PassWord, params.PassWord)
 	if !ok || err != nil {
-		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		response.Error(c, constant.ErrorHaveNoAccess, err, constant.ErrorMsg[constant.ErrorHaveNoAccess])
 		return
 	}
 	jwtExpTime := viper.GetInt("jwt.expireTime")

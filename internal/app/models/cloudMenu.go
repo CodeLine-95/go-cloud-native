@@ -48,11 +48,28 @@ func (c *CloudMenu) ParseFields(p any) *CloudMenu {
 	return c
 }
 
+type meta struct {
+	Title string `json:"title,omitempty"`
+	Icon  string `json:"icon,omitempty"`
+	Type  string `json:"type,omitempty"`
+}
+
+type ItemTree struct {
+	Name      string        `json:"name"`
+	Path      string        `json:"path"`
+	Meta      meta          `json:"meta"`
+	Pid       uint32        `json:"-"`
+	Component string        `json:"component"`
+	Children  *UserMenuTree `json:"children,omitempty"`
+}
+
 type CloudMenuTree []*CloudMenu
 
+type UserMenuTree []*ItemTree
+
 type MenuPermsResp struct {
-	Menus CloudMenuTree `json:"menus"`
-	Perms []string      `json:"perms"`
+	Menus UserMenuTree `json:"menus"`
+	Perms []string     `json:"perms"`
 }
 
 // TreeNode 格式化树节点
@@ -77,6 +94,43 @@ func (c CloudMenuTree) TreeNode() CloudMenuTree {
 				continue
 			}
 			*p_item.ChildNode = append(*p_item.ChildNode, val)
+		}
+	}
+	return TreeNode
+}
+
+// TreeNode 格式化树节点
+func (c CloudMenuTree) UserTreeNode() UserMenuTree {
+	if len(c) <= 0 {
+		return UserMenuTree{}
+	}
+	// 先重组数据：以数据的ID作为外层的key编号，以便下面进行子树的数据组合
+	TreeMenuData := make(map[uint32]*ItemTree)
+	for _, item := range c {
+		TreeMenuData[item.MenuId] = &ItemTree{
+			Name: item.MenuName,
+			Path: item.MenuPath,
+			Meta: meta{
+				Title: item.MenuTitle,
+				Icon:  item.MenuIcon,
+				Type:  item.MenuType,
+			},
+			Pid:       item.ParentId,
+			Component: item.Component,
+		}
+	}
+	var TreeNode UserMenuTree
+	for _, val := range TreeMenuData {
+		if val.Pid == 0 {
+			TreeNode = append(TreeNode, val)
+			continue
+		}
+		if pItem, ok := TreeMenuData[val.Pid]; ok {
+			if pItem.Children == nil {
+				pItem.Children = &UserMenuTree{val}
+				continue
+			}
+			*pItem.Children = append(*pItem.Children, val)
 		}
 	}
 	return TreeNode
