@@ -82,10 +82,10 @@ type ImagesPullRequest struct {
 }
 
 type EtcdRequest struct {
-	ID          int32  `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Remark      string `json:"remark,omitempty"`
-	Content     string `json:"content,omitempty"`
-	IsSubscribe int32  `json:"is_subscribe,omitempty"`
-	SubscribeID string `json:"subscribe_id,omitempty"`
+	ID        int32  `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Remark    string `json:"remark,omitempty"`
+	Content   string `json:"content,omitempty"`
+	IsSub     uint32 `json:"is_sub,omitempty"`
+	SubUserID string `json:"sub_user_id,omitempty"`
 }

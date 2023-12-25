@@ -23,20 +23,20 @@ func userRouter(r *gin.RouterGroup) {
 // 角色
 func roleRouter(r *gin.RouterGroup) {
 	c := r.Group("/role")
-	c.POST("/list", logic.RoleResp)
+	c.GET("/list", logic.RoleResp)
 	c.POST("/add", logic.RoleAdd)
-	c.POST("/edit", logic.RoleEdit)
-	c.POST("/del", logic.RoleDel)
-	c.POST("/menu", logic.GetRoleMenu)
+	c.PUT("/edit", logic.RoleEdit)
+	c.DELETE("/del", logic.RoleDel)
+	c.GET("/menu", logic.GetRoleMenu)
 }
 
 // 菜单
 func menuRouter(r *gin.RouterGroup) {
 	c := r.Group("/menu")
-	c.POST("/list", logic.MenuResp)
+	c.GET("/list", logic.MenuResp)
 	c.POST("/add", logic.MenuAdd)
-	c.POST("/edit", logic.MenuEdit)
-	c.POST("/del", logic.MenuDel)
+	c.PUT("/edit", logic.MenuEdit)
+	c.DELETE("/del", logic.MenuDel)
 }
 
 // 分配

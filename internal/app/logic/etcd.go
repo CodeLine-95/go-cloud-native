@@ -138,3 +138,21 @@ func PutService(c *gin.Context) {
 	}
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
 }
+
+// 服务订阅
+func SubscribeService(c *gin.Context) {
+	var params common.EtcdRequest
+	if err := c.ShouldBindJSON(&params); err != nil {
+		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
+		return
+	}
+	var cloudEtcd models.CloudEtcd
+	cloudEtcd.ParseFields(params)
+	// 更新
+	res := db.D().Save(cloudEtcd)
+	if res.RowsAffected == 0 || res.Error != nil {
+		response.Error(c, constant.ErrorDB, res.Error, constant.ErrorMsg[constant.ErrorDB])
+		return
+	}
+	response.OK(c, nil, constant.ErrorMsg[constant.Success])
+}
