@@ -6,9 +6,9 @@ type LoginRequest struct {
 }
 
 type SearchRequest struct {
-	SearchKey string `json:"search_key,omitempty"`
-	Page      int    `json:"page,omitempty"`
-	PageSize  int    `json:"page_size,omitempty"`
+	SearchKey string `form:"search_key,omitempty"`
+	Page      int    `form:"page,omitempty"`
+	PageSize  int    `form:"page_size,omitempty"`
 }
 type RoleRequest struct {
 	RoleId     int    `json:"role_id,omitempty"`
@@ -20,7 +20,7 @@ type RoleRequest struct {
 }
 
 type MenuRouterReqest struct {
-	IsTree uint8 `json:"is_tree,omitempty"`
+	IsTree uint8 `form:"is_tree,omitempty"`
 }
 
 type MenuRequest struct {

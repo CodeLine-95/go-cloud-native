@@ -68,7 +68,7 @@ func CreatePut(c *gin.Context) {
 
 func GetService(c *gin.Context) {
 	var params common.SearchRequest
-	if err := c.ShouldBindJSON(&params); err != nil {
+	if err := c.ShouldBindQuery(&params); err != nil {
 		response.Error(c, constant.ErrorParams, err, constant.ErrorMsg[constant.ErrorParams])
 		return
 	}
