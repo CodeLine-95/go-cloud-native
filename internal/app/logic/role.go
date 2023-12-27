@@ -9,6 +9,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/tools/structs"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm/clause"
 	"strings"
 	"time"
 )
@@ -26,6 +27,7 @@ func RoleResp(c *gin.Context) {
 	err := db.D().Select(selectFields).
 		Where("position(concat(?) in concat(role_key,role_name)) > 0", params.SearchKey).
 		Scopes(base.Paginate(params.Page, params.PageSize)).
+		Order(clause.OrderByColumn{Column: clause.Column{Name: "role_sort"}, Desc: true}).
 		Find(&roleResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
@@ -123,6 +125,7 @@ func RoleDel(c *gin.Context) {
 	response.OK(c, nil, constant.ErrorMsg[constant.Success])
 }
 
+// GetRoleMenu 获取当前登录用户的权限菜单
 func GetRoleMenu(c *gin.Context) {
 	auth, err := base.GetAuth(c)
 	if err != nil {

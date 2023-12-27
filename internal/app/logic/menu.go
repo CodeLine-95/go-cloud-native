@@ -9,6 +9,7 @@ import (
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/response"
 	"github.com/CodeLine-95/go-cloud-native/tools/structs"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm/clause"
 	"time"
 )
 
@@ -22,7 +23,9 @@ func MenuResp(c *gin.Context) {
 	selectFields := structs.ToTags(models.CloudMenu{}, "json")
 
 	var menuResp models.CloudMenuTree
-	err := db.D().Select(selectFields).Find(&menuResp).Error
+	err := db.D().Select(selectFields).
+		Order(clause.OrderByColumn{Column: clause.Column{Name: "menu_sort"}, Desc: true}).
+		Find(&menuResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
