@@ -20,7 +20,7 @@ type RoleRequest struct {
 }
 
 type MenuRouterReqest struct {
-	IsTree uint8 `form:"is_tree,omitempty"`
+	SearchKey string `form:"search_key,omitempty"`
 }
 
 type MenuRequest struct {

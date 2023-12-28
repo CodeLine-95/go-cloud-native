@@ -24,6 +24,7 @@ func MenuResp(c *gin.Context) {
 
 	var menuResp models.CloudMenuTree
 	err := db.D().Select(selectFields).
+		Where("position(concat(?) in concat(menu_title)) > 0", params.SearchKey).
 		Order(clause.OrderByColumn{Column: clause.Column{Name: "menu_sort"}, Desc: true}).
 		Find(&menuResp).Error
 	if err != nil {
@@ -31,12 +32,10 @@ func MenuResp(c *gin.Context) {
 		return
 	}
 
-	if params.IsTree == 1 {
-		// 生成权限二叉树
-		menuResp = menuResp.TreeNode()
-	}
+	// 生成权限二叉树
+	userMenuResp := menuResp.UserTreeNode()
 
-	response.OK(c, menuResp, constant.ErrorMsg[constant.Success])
+	response.OK(c, userMenuResp, constant.ErrorMsg[constant.Success])
 }
 
 func MenuAdd(c *gin.Context) {

@@ -71,33 +71,6 @@ type MenuPermsResp struct {
 }
 
 // TreeNode 格式化树节点
-func (c CloudMenuTree) TreeNode() CloudMenuTree {
-	if len(c) <= 0 {
-		return c
-	}
-	// 先重组数据：以数据的ID作为外层的key编号，以便下面进行子树的数据组合
-	TreeMenuData := make(map[uint32]*CloudMenu)
-	for _, item := range c {
-		TreeMenuData[item.MenuId] = item
-	}
-	var TreeNode CloudMenuTree
-	for _, val := range TreeMenuData {
-		if val.ParentId == 0 {
-			TreeNode = append(TreeNode, val)
-			continue
-		}
-		if p_item, ok := TreeMenuData[val.ParentId]; ok {
-			if p_item.ChildNode == nil {
-				p_item.ChildNode = &CloudMenuTree{val}
-				continue
-			}
-			*p_item.ChildNode = append(*p_item.ChildNode, val)
-		}
-	}
-	return TreeNode
-}
-
-// TreeNode 格式化树节点
 func (c CloudMenuTree) UserTreeNode() UserMenuTree {
 	if len(c) <= 0 {
 		return UserMenuTree{}

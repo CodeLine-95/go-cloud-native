@@ -38,8 +38,8 @@ function images() {
         result=$(echo $old_container_name | grep "${pre_name}")
         if [[ "$result" != "" ]]; then
           # 删除上一个运行的容器
-          docker stop ${old_container_name}
-          docker rm ${old_container_name}
+          echo "stop：" + $(docker stop ${old_container_name})
+          echo "rm：" + $(docker rm ${old_container_name})
         fi
       done
     fi
@@ -47,8 +47,8 @@ function images() {
   # 启动容器，指定镜像
   # --privileged=true 给容器开特权，这样 root 用户才是真正的 root 用户，否则 root 用户就是【普通用户】
   new_container_name=$(GetRandNum 5)
-  echo ${pre_name}-${new_container_name}
-  docker run -d --name ${pre_name}-${new_container_name} -p 8000:8000 --privileged=true ${pre_name}:${new_tag}
+  echo "new run name: " + ${pre_name}-${new_container_name}
+  echo "run：" + $(docker run -d --name ${pre_name}-${new_container_name} -p 8000:8000 --privileged=true ${pre_name}:${new_tag})
 }
 
 # 生成指定长度的随机字符串
