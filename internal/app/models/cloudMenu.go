@@ -53,10 +53,11 @@ type meta struct {
 }
 
 type ItemTree struct {
+	Id        uint32        `json:"id"`
 	Name      string        `json:"name"`
 	Path      string        `json:"path"`
 	Meta      meta          `json:"meta"`
-	Pid       uint32        `json:"-"`
+	Pid       uint32        `json:"parentId"`
 	Component string        `json:"component"`
 	Children  *UserMenuTree `json:"children,omitempty"`
 }
@@ -79,6 +80,7 @@ func (c CloudMenuTree) UserTreeNode() UserMenuTree {
 	TreeMenuData := make(map[uint32]*ItemTree)
 	for _, item := range c {
 		TreeMenuData[item.MenuId] = &ItemTree{
+			Id:   item.MenuId,
 			Name: item.MenuName,
 			Path: item.MenuPath,
 			Meta: meta{

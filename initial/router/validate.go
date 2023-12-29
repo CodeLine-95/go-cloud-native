@@ -10,7 +10,7 @@ func Validate(r *gin.RouterGroup) {
 	userRouter(r)
 	roleRouter(r)
 	menuRouter(r)
-	allocationRouter(r)
+	assignRouter(r)
 	dockerRouter(r)
 	etcdRouter(r)
 }
@@ -40,8 +40,8 @@ func menuRouter(r *gin.RouterGroup) {
 }
 
 // 分配
-func allocationRouter(r *gin.RouterGroup) {
-	c := r.Group("/allocation")
+func assignRouter(r *gin.RouterGroup) {
+	c := r.Group("/assign")
 	c.POST("/user-role", logic.UserRole)
 	c.POST("/role-menu", logic.RoleMenu)
 }

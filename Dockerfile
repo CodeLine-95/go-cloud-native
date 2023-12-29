@@ -7,7 +7,7 @@ COPY . .
 RUN echo go-cloud-native \
     && go env -w GOPROXY=https://goproxy.cn,direct \
     && go mod download \
-    && go build -o build/package/main ./cmd/server/main.go
+    && go build -ldflags "-s -w" -o build/package/main ./cmd/server/main.go
 
 
 # 使用最小镜像来运行编译后的 go 项目
