@@ -118,6 +118,7 @@ func Init() {
 					models.CloudMenu{},
 					models.CloudUserRole{},
 					models.CloudEtcd{},
+					models.CloudLog{},
 				)
 				engine.AutoMigrate(syncMap...)
 				logz.Info("auto migrate",
@@ -128,6 +129,7 @@ func Init() {
 						new(models.CloudMenu).TableName(),
 						new(models.CloudUserRole).TableName(),
 						new(models.CloudEtcd).TableName(),
+						new(models.CloudLog).TableName(),
 					}),
 				)
 			}

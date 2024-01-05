@@ -23,6 +23,12 @@ type MenuRouterReqest struct {
 	SearchKey string `form:"search_key,omitempty"`
 }
 
+type LogSearchReqest struct {
+	SearchRequest
+	StartTime string `form:"start_time,omitempty"`
+	EndTime   string `form:"end_time,omitempty"`
+}
+
 type MenuRequest struct {
 	MenuId     uint32 `json:"menu_id,omitempty"`
 	MenuName   string `json:"menu_name,omitempty"`

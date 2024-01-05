@@ -7,6 +7,7 @@ import (
 
 // 入口
 func Validate(r *gin.RouterGroup) {
+	systemRouter(r)
 	userRouter(r)
 	roleRouter(r)
 	menuRouter(r)
@@ -17,50 +18,70 @@ func Validate(r *gin.RouterGroup) {
 
 func userRouter(r *gin.RouterGroup) {
 	c := r.Group("/user")
-	c.GET("info", logic.GetUserInfo)
+	{
+		c.GET("list", logic.GetUserList)
+		c.GET("info", logic.GetUserInfo)
+	}
+}
+
+func systemRouter(r *gin.RouterGroup) {
+	c := r.Group("/log")
+	{
+		c.GET("list", logic.GetLogList)
+	}
 }
 
 // 角色
 func roleRouter(r *gin.RouterGroup) {
 	c := r.Group("/role")
-	c.GET("/list", logic.RoleResp)
-	c.POST("/add", logic.RoleAdd)
-	c.PUT("/edit", logic.RoleEdit)
-	c.DELETE("/del", logic.RoleDel)
-	c.GET("/menu", logic.GetRoleMenu)
+	{
+		c.GET("/list", logic.RoleResp)
+		c.POST("/add", logic.RoleAdd)
+		c.PUT("/edit", logic.RoleEdit)
+		c.DELETE("/del", logic.RoleDel)
+		c.GET("/menu", logic.GetRoleMenu)
+	}
 }
 
 // 菜单
 func menuRouter(r *gin.RouterGroup) {
 	c := r.Group("/menu")
-	c.GET("/list", logic.MenuResp)
-	c.POST("/add", logic.MenuAdd)
-	c.PUT("/edit", logic.MenuEdit)
-	c.DELETE("/del", logic.MenuDel)
+	{
+		c.GET("/list", logic.MenuResp)
+		c.POST("/add", logic.MenuAdd)
+		c.PUT("/edit", logic.MenuEdit)
+		c.DELETE("/del", logic.MenuDel)
+	}
 }
 
 // 分配
 func assignRouter(r *gin.RouterGroup) {
 	c := r.Group("/assign")
-	c.POST("/user-role", logic.UserRole)
-	c.POST("/role-menu", logic.RoleMenu)
+	{
+		c.POST("/user-role", logic.UserRole)
+		c.POST("/role-menu", logic.RoleMenu)
+	}
 }
 
 // docker
 func dockerRouter(r *gin.RouterGroup) {
-	docker := r.Group("/docker")
-	docker.GET("/list", logic.ContainerList)
-	docker.POST("/logs", logic.ContainerLogs)
-	docker.POST("/stop", logic.ContainerStop)
-	docker.POST("/batch-stop", logic.BatchContainerStop)
-	docker.POST("/create", logic.ContainerCreate)
+	c := r.Group("/docker")
+	{
+		c.GET("/list", logic.ContainerList)
+		c.POST("/logs", logic.ContainerLogs)
+		c.POST("/stop", logic.ContainerStop)
+		c.POST("/batch-stop", logic.BatchContainerStop)
+		c.POST("/create", logic.ContainerCreate)
+	}
 }
 
 // etcd
 func etcdRouter(r *gin.RouterGroup) {
-	etcd := r.Group("/etcd")
-	etcd.POST("/create", logic.CreatePut)
-	etcd.GET("/list", logic.GetService)
-	etcd.DELETE("/del", logic.DelService)
-	etcd.POST("/put", logic.PutService)
+	c := r.Group("/etcd")
+	{
+		c.POST("/create", logic.CreatePut)
+		c.GET("/list", logic.GetService)
+		c.DELETE("/del", logic.DelService)
+		c.POST("/put", logic.PutService)
+	}
 }

@@ -159,7 +159,9 @@ func GetRoleMenu(c *gin.Context) {
 		permsDb = permsDb.Where("menu_id in (?)", strings.Join(menuIds, ","))
 	}
 
-	err = dbx.Where("menu_type in(?,?)", "D", "M").Find(&menuResp).Error
+	err = dbx.Where("menu_type in(?,?)", "D", "M").
+		Order(clause.OrderByColumn{Column: clause.Column{Name: "menu_sort"}, Desc: true}).
+		Find(&menuResp).Error
 	if err != nil {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
