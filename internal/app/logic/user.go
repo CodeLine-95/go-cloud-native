@@ -30,7 +30,7 @@ func GetUserList(c *gin.Context) {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
-	response.OK(c, userResp, constant.ErrorMsg[constant.Success])
+	response.PageOK(c, userResp, len(userResp), params.Page, params.PageSize, constant.ErrorMsg[constant.Success])
 }
 
 func GetUserInfo(c *gin.Context) {

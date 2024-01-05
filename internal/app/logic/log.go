@@ -35,5 +35,6 @@ func GetLogList(c *gin.Context) {
 		response.Error(c, constant.ErrorDB, err, constant.ErrorMsg[constant.ErrorDB])
 		return
 	}
-	response.OK(c, logResp, constant.ErrorMsg[constant.Success])
+
+	response.PageOK(c, logResp, len(logResp), params.Page, params.PageSize, constant.ErrorMsg[constant.Success])
 }
