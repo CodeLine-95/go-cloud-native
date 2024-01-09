@@ -4,6 +4,8 @@ import (
 	"time"
 )
 
+var DateDayOnly = "200601"
+
 func ParseTime(timeStr string) (int64, error) {
 	curTime, err := time.ParseInLocation(time.DateTime, timeStr, new(time.Location))
 	if err != nil {

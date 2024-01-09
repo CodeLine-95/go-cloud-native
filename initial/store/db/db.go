@@ -67,7 +67,7 @@ func Init() {
 				// 在完成初始化后，GORM 会自动 ping 数据库以检查数据库的可用性，若要禁用该特性，可将其设置为 true
 				DisableAutomaticPing: false,
 				// 在 AutoMigrate 或 CreateTable 时，GORM 会自动创建外键约束，若要禁用该特性，可将其设置为
-				DisableForeignKeyConstraintWhenMigrating: false,
+				DisableForeignKeyConstraintWhenMigrating: true,
 				// 启用全局更新
 				AllowGlobalUpdate: false,
 				// 翻译方言错误
@@ -109,16 +109,16 @@ func Init() {
 
 			// 是否自动同步数据库表结构
 			if instanceCfg.AutoLoad {
-				syncMap := make([]interface{}, 0)
+				var syncMap []interface{}
 				syncMap = append(
 					syncMap,
-					models.CloudUser{},
-					models.CloudRole{},
-					models.CloudRoleMenu{},
-					models.CloudMenu{},
-					models.CloudUserRole{},
-					models.CloudEtcd{},
-					models.CloudLog{},
+					&models.CloudUser{},
+					&models.CloudRole{},
+					&models.CloudRoleMenu{},
+					&models.CloudMenu{},
+					&models.CloudUserRole{},
+					&models.CloudEtcd{},
+					&models.CloudLog{},
 				)
 				engine.AutoMigrate(syncMap...)
 				logz.Info("auto migrate",

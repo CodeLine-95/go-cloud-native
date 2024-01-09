@@ -4,6 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	common "github.com/CodeLine-95/go-cloud-native/common/models"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/models"
+	"github.com/CodeLine-95/go-cloud-native/internal/app/service/logs"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/jwtToken"
+	"github.com/CodeLine-95/go-cloud-native/internal/pkg/utils/ip"
 	"github.com/CodeLine-95/go-cloud-native/internal/pkg/xlog"
 	"github.com/CodeLine-95/go-cloud-native/tools/id"
 	"github.com/CodeLine-95/go-cloud-native/tools/logz"
@@ -68,5 +73,23 @@ func Logger() gin.HandlerFunc {
 			logz.F("latency", latency),
 			logz.F("bodySize", c.Writer.Size()),
 		))
+
+		token := jwtToken.GetToken(c.Request, "")
+
+		cloudLog := &models.CloudLog{
+			LogID:      traceId.GetTraceId(c),
+			LogName:    "--",
+			RequestUrl: c.Request.RequestURI,
+			Method:     c.Request.Method,
+			ClientIP:   ip.ClientIP(c),
+			Level:      "info",
+			AppType:    0,
+			ParamsData: params,
+			ModelTime: common.ModelTime{
+				CreateTime: uint32(time.Now().Unix()),
+			},
+		}
+
+		_ = logs.SaveData(cloudLog, token)
 	}
 }
