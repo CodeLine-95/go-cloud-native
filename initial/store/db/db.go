@@ -119,19 +119,9 @@ func Init() {
 					&models.CloudUserRole{},
 					&models.CloudEtcd{},
 					&models.CloudLog{},
+					&models.CloudApi{},
 				)
-				engine.AutoMigrate(syncMap...)
-				logz.Info("auto migrate",
-					logz.F("table", []string{
-						new(models.CloudUser).TableName(),
-						new(models.CloudRole).TableName(),
-						new(models.CloudRoleMenu).TableName(),
-						new(models.CloudMenu).TableName(),
-						new(models.CloudUserRole).TableName(),
-						new(models.CloudEtcd).TableName(),
-						new(models.CloudLog).TableName(),
-					}),
-				)
+				autoMigrate(engine, syncMap)
 			}
 
 			groups[instanceRwType] = engine
@@ -147,4 +137,22 @@ func Grp(name string) *gorm.DB {
 // D 返回指定实例组实例
 func D() *gorm.DB {
 	return groups[constant.CloudNative]
+}
+
+func autoMigrate(engine *gorm.DB, syncData []interface{}) {
+	for _, modelTable := range syncData {
+		_ = engine.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(modelTable)
+	}
+	logz.Info("auto migrate",
+		logz.F("table", []string{
+			new(models.CloudUser).TableName(),
+			new(models.CloudRole).TableName(),
+			new(models.CloudRoleMenu).TableName(),
+			new(models.CloudMenu).TableName(),
+			new(models.CloudUserRole).TableName(),
+			new(models.CloudEtcd).TableName(),
+			new(models.CloudLog).TableName(),
+			new(models.CloudApi).TableName(),
+		}),
+	)
 }
